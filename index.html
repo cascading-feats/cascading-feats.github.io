@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecting and Controlling Sycophancy with Cascading Linear Features</title>
+    <meta name="description" content="An iterative data generation pipeline that isolates cascading linear features responsible for sycophancy in LLMs, enabling robust detection and interpretable steering.">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <meta name="robots" content="all">
+    <meta content="en_EN" property="og:locale">
+    <meta content="website" property="og:type">
+    <meta content="https://cascading-feats.github.io" property="og:url">
+    <meta content="Detecting and Controlling Sycophancy with Cascading Linear Features" property="og:title">
+    <meta content="An iterative data generation pipeline that isolates cascading linear features responsible for sycophancy in LLMs, enabling robust detection and interpretable steering." property="og:description">
+    <meta content="assets/figures/hero.png" property="og:image">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Detecting and Controlling Sycophancy with Cascading Linear Features">
+    <meta name="twitter:image:src" content="assets/figures/hero.png">
+
+    <link rel="stylesheet" type="text/css" media="all" href="assets/stylesheets/main_free.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            "HTML-CSS": {
+              scale: 95,
+              fonts: ["Gyre-Pagella"],
+              imageFont: null,
+              undefinedFamily: "'Arial Unicode MS', cmbright"
+            },
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+              }
+          });
+    </script>
+    <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body onload="if (document.activeElement) document.activeElement.blur();">
+
+    <script>
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 0);
+        });
+    </script>
+
+    <!-- Title Page -->
+    <div class="container blog" id="first-content" style="background-color: #E0E4E6;">
+        <div class="blog-title">
+            <div class="blog-intro">
+                <div>
+                    <h1 class="title"><b>Detecting and Controlling Sycophancy with Cascading Linear Features</b></h1>
+                    <p class="author">
+                        <a href="https://matybohacek.com">Maty Bohacek</a> <sup>1</sup>,
+                        <a href="https://rishubjain.github.io/">Rishub Jain</a> <sup>2</sup>,
+                        <a href="https://scholar.google.com/citations?user=g42kJfIAAAAJ">Nicholas Dufour</a> <sup>2</sup>,
+                        <a href="https://research.google/people/thomasleung/">Thomas Leung</a> <sup>2</sup>,
+                        <a href="http://chris.bregler.com/">Christoph Bregler</a> <sup>2</sup>, and
+                        <a href="https://roma-patel.github.io/">Roma Patel</a> <sup>2</sup>
+                    </p>
+                    <p class="author" style="padding-top: 0px;">
+                        <sup>1</sup> Stanford University &nbsp;&nbsp; <sup>2</sup> Google DeepMind
+                    </p>
+                    <p class="abstract">
+                        Interpreting and controlling model behaviors through activation steering requires many contrastive sample pairs. We present an iterative data generation pipeline that isolates <b>cascading linear features</b> (CLiF) responsible for a behavior. By identifying features that scale monotonically with behavior intensity using sparse autoencoders, we enable robust detection, deterministic scoring, and interpretable steering of sycophancy in LLMs&mdash;matching or outperforming LLM-as-a-judge and system prompting baselines at a fraction of the computational cost.
+                    </p>
+
+                    <div class="info">
+                        <div>
+                            <a href="_COLM_2026__Cascading_Linear_Features.pdf" class="button icon" style="background-color: rgba(255, 255, 255, 0.2);"> Paper <i class="fa-solid fa-book-open"></i></a> &nbsp;&nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-cover" style="width: 100% !important;">
+                <img src="assets/figures/hero.png">
+            </div>
+        </div>
+    </div>
+
+    <div class="container blog main first" id="blog-main">
+
+        <fieldset class="insights-box">
+            <legend>Key Insights</legend>
+            <ul style="margin-left: 1.5em; margin-bottom: 0;">
+                <li style="margin-bottom: 0.8em;"><b>Cascading data generation isolates behavioral features.</b> Instead of binary contrastive pairs, our iterative pipeline generates a seven-point behavioral spectrum ($\ell \in \{-3, \ldots, +3\}$), retaining only SAE features whose activations scale monotonically with behavior intensity.</li>
+                <li style="margin-bottom: 0.8em;"><b>CLiF features form linearly separable subspaces.</b> Sycophancy features discovered through cascading samples produce geometrically structured encodings where principal components correspond to behavioral intensity, enabling deterministic and continuous scoring.</li>
+                <li style="margin-bottom: 0.8em;"><b>Detection outperforms LLM-as-a-judge baselines.</b> Simple linear classifiers on CLiF vectors achieve 98.3% accuracy, significantly outperforming Gemini 2.5 Pro (60.0&ndash;63.9%) while being fully deterministic and consistent across trials.</li>
+                <li style="margin-bottom: 0.8em;"><b>Steering matches system prompting at 50&times; lower cost.</b> CLiF clamping achieves sycophancy scores competitive with the strongest prompting baselines (0.33 ELEPHANT), while requiring a fraction of the inference compute.</li>
+            </ul>
+        </fieldset>
+
+        <p class='text'>
+            Interpreting and steering the internal representations of Large Language Models (LLMs) relies on identifying directions in activation space that correspond to learned concepts. Existing steering methods typically construct contrastive pairs to compute steering vectors, but these dense vectors suffer from limitations in quantification, interpretability, and entanglement with unrelated capabilities.
+        </p>
+        <p class='text'>
+            We propose a method utilizing SAE features to decompose observed behavioral tendencies into discrete, interpretable features at different detectable strengths. Instead of relying on two contrastive sets of behaviors, we introduce an iterative data generation method that induces degrees of features, from which we select only those that scale linearly with behavior. We call these <b>Cascading Linear Features</b> (CLiF).
+        </p>
+    </div>
+
+    <div class="container blog main gray">
+
+        <img src="assets/figures/hero.png">
+        <p class="caption">
+            <b>Cascading Linear Feature Extraction.</b> (Left) Contrastive feature extraction compares neutral and behavior-exhibiting responses to compute a single steering vector from their activation differences. (Right) Our cascading approach iteratively regenerates responses from a neutral starting point towards and away from the target behavior. By identifying features that exhibit monotonic cascading effects across regenerations (green trajectory), we extract more robust and interpretable steering vectors.
+        </p>
+
+    </div>
+
+    <div class="container blog main">
+
+        <h1>Method</h1>
+
+        <p class="text">
+            Our method identifies interpretable features within a language model's representations that exhibit a monotonic, cascading relationship with a target behavior. This consists of three stages:
+        </p>
+
+        <p class="text">
+            <b>1. Cascading Data Generation.</b> We generate a neutral baseline response for each input prompt and iteratively prompt the model to rewrite each response to exhibit more (or less) of the target behavior. This yields a seven-point spectrum $\ell \in \{-3, -2, -1, 0, +1, +2, +3\}$ for every prompt, validated by Spearman's $\rho = 0.887$ ($p < 0.001$) between steering level and judge score.
+        </p>
+
+        <p class="text">
+            <b>2. Feature Selection.</b> We extract activations and decompose them using an SAE, then retain only concepts whose mean activations are monotonically non-decreasing along each half-spectrum. The union of behavior-aligned ($\mathcal{F}^+$) and counter-aligned ($\mathcal{F}^-$) features forms the CLiF set $\mathcal{F}_{\text{CLiF}}$.
+        </p>
+
+        <p class="text">
+            <b>3. Detection &amp; Steering.</b> For detection, we train linear classifiers on CLiF-filtered SAE activations. For steering, we intervene on CLiF features during the forward pass via <em>clamping</em> (setting activations to zero) or <em>negative steering</em> (subtracting feature directions).
+        </p>
+
+    </div>
+
+    <div class="container blog main gray">
+
+        <img src="assets/figures/steering-approaches.png">
+        <p class="caption">
+            <b>Steering Approaches.</b> Schematic illustration of three intervention strategies for modulating LLM behavior: <b>Clamping</b> surgically ablates specific features by setting them to zero; <b>Negative Steering</b> actively opposes behaviors by subtracting feature vectors; and <b>Additive Steering</b> amplifies target concepts by adding feature vectors.
+        </p>
+
+    </div>
+
+    <div class="container blog main">
+        <h1>Results</h1>
+
+        <p class="text">
+            We evaluate CLiF on Llama 3.1 8B Instruct using the Anthropic Sycophancy Dataset as well as three out-of-distribution scenario sets (Culture, Non-US Policy, Office Scenarios).
+        </p>
+
+        <ul style="margin-left: 3em !important;">
+            <li><p class="text"><b>CLiF vectors produce separable sycophancy representations.</b> The feature space exhibits distinct geometric structure: the first principal component corresponds to sycophancy intensity, while the second corresponds to rejection intensity, with neutral responses clustering along the diagonal.</p></li>
+
+            <li><p class="text"><b>98.3% detection accuracy with simple linear probes.</b> SVMs trained on CLiF vectors significantly outperform LLM-as-a-judge baselines (Gemini 2.5 Pro at 60.0&ndash;63.9%), while achieving complete consistency and zero formatting errors across trials.</p></li>
+
+            <li><p class="text"><b>CLiF generalizes to unseen domains.</b> PCA encodings over out-of-distribution samples confirm that the geometric separability observed in training holds across Culture, Non-US Policy, and Office Scenario datasets.</p></li>
+        </ul>
+
+    </div>
+
+    <div class="container blog main gray">
+
+        <img src="assets/figures/concepts.png">
+        <p class="caption">
+            <b>Discovered Sycophancy Concepts.</b> Token-level activations of SAE concepts identified as sycophantic by our Cascading Linear Features method. These concepts are listed with their default autointerpretability descriptions, labeled as Adequate, Partially Adequate, or Inadequate based on their descriptiveness for sycophantic features.
+        </p>
+
+    </div>
+
+    <div class="container blog main">
+
+        <ul style="margin-left: 3em !important;">
+            <li><p class="text"><b>Steering matches system prompting at drastically lower cost.</b> CLiF clamping achieves a sycophancy score of 0.33 (ELEPHANT), effectively matching the strongest system prompting baseline (0.33) and outperforming dense Persona Vectors (0.43), while requiring only 0.5&times; relative cost compared to the 28&ndash;50&times; cost of extended system prompts.</p></li>
+
+            <li><p class="text"><b>CLiF outperforms contrastive feature extraction.</b> Compared to standard contrastive feature extraction, CLiF improves detection accuracy by up to 11 percentage points and reduces steering sycophancy from 0.45&ndash;0.47 to 0.33 ELEPHANT score.</p></li>
+        </ul>
+
+    </div>
+
+    <div class="container blog main gray">
+
+        <div class="columns-2">
+            <div>
+                <img src="assets/figures/pca-2d.png">
+                <p class="caption">
+                    <b>2D Sycophancy Encoding.</b> PCA of sycophancy encodings (44 CLiF features). The first component corresponds to sycophancy intensity; the second to rejection intensity. Neutral responses cluster along the diagonal.
+                </p>
+            </div>
+            <div>
+                <img src="assets/figures/pca-2d-full.png">
+                <p class="caption">
+                    <b>2D Sycophancy Encoding (Full CLiF).</b> PCA visualization using all CLiF features, showing clear linear separability between sycophantic (green), neutral (blue), and rejecting (red) responses on both train and test sets.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container blog main">
+
+        <h1>Qualitative Steering Examples</h1>
+
+        <p class="text">
+            The granular control enabled by CLiF's sparse dictionary allows for surgical interventions. In scenarios where conventional steering vectors or system prompts fail to mitigate sycophancy (or inadvertently induce refusal), CLiF's targeted clamping of specific sycophancy features successfully neutralizes the behavior while maintaining response coherence.
+        </p>
+
+    </div>
+
+    <div class="container blog main gray">
+
+        <img src="assets/figures/steering-example.png">
+        <p class="caption">
+            <b>Example of Successful Steering.</b> Three outputs of an LLM responding to the same user prompt with (left) no steering, (center) Persona Vectors steering, and (right) our CLiF steering. ELEPHANT features are shown at the bottom; the collapsed ELEPHANT score is presented in the top right corner of each response box. Only CLiF steering successfully prevents the LLM from being sycophantic, achieving a score of 0.00.
+        </p>
+
+    </div>
+
+    <div class="container blog main">
+
+        <h1>Detection Results</h1>
+
+        <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Approach</th>
+                    <th>Method</th>
+                    <th>Anthropic</th>
+                    <th>Culture</th>
+                    <th>Non-US</th>
+                    <th>Office</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">LLM-as-a-Judge</td>
+                    <td>Gemini 2.5 Flash</td>
+                    <td>54.8</td>
+                    <td>64.0</td>
+                    <td>63.9</td>
+                    <td>86.8</td>
+                </tr>
+                <tr>
+                    <td>Gemini 2.5 Pro</td>
+                    <td>63.9</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Contrastive (Baseline)</td>
+                    <td>LR</td>
+                    <td>98.3</td>
+                    <td>90.0</td>
+                    <td>96.7</td>
+                    <td>90.0</td>
+                </tr>
+                <tr>
+                    <td>SVM</td>
+                    <td>90.0</td>
+                    <td>88.3</td>
+                    <td>93.3</td>
+                    <td>91.7</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><b>CLiF (Ours)</b></td>
+                    <td><b>LR (All)</b></td>
+                    <td><b>96.7</b></td>
+                    <td><b>96.7</b></td>
+                    <td><b>95.0</b></td>
+                    <td><b>95.0</b></td>
+                </tr>
+                <tr>
+                    <td><b>SVM (All)</b></td>
+                    <td><b>98.3</b></td>
+                    <td><b>100.0</b></td>
+                    <td><b>98.3</b></td>
+                    <td><b>98.3</b></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <p class="caption" style="padding-top: 1vh;">
+            <b>Sycophancy Detection Performance.</b> Classification accuracy (%) on the Anthropic Sycophancy Dataset and three out-of-distribution datasets. CLiF configurations significantly outperform LLM-as-a-judge baselines (McNemar's exact test, $p < 0.001$ on all test sets).
+        </p>
+
+    </div>
+
+    <div class="container blog main">
+
+        <h1>Steering Results</h1>
+
+        <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Approach</th>
+                    <th>Method</th>
+                    <th>ELEPHANT &darr;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">Prompting (Baselines)</td>
+                    <td>Wei et al. (2023)</td>
+                    <td>0.33 &plusmn; 0.24</td>
+                </tr>
+                <tr>
+                    <td>Sharma et al. (2023)</td>
+                    <td>0.37 &plusmn; 0.21</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">Steering (Baselines)</td>
+                    <td>Persona Vectors</td>
+                    <td>0.43 &plusmn; 0.21</td>
+                </tr>
+                <tr>
+                    <td>Contrastive + Addition</td>
+                    <td>0.45 &plusmn; 0.26</td>
+                </tr>
+                <tr>
+                    <td>Contrastive + Clamp</td>
+                    <td>0.47 &plusmn; 0.30</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><b>CLiF (Ours)</b></td>
+                    <td><b>CLiF + Subtract (One-sided)</b></td>
+                    <td><b>0.37 &plusmn; 0.24</b></td>
+                </tr>
+                <tr>
+                    <td><b>CLiF + Clamp (All)</b></td>
+                    <td><b>0.33 &plusmn; 0.27</b></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <p class="caption" style="padding-top: 1vh;">
+            <b>Anti-Sycophancy Steering Performance.</b> Mean ELEPHANT score (lower = less sycophantic) on 50 randomly sampled scenarios from the Anthropic Sycophancy Dataset. CLiF clamping matches the best prompting baseline while requiring only 0.5&times; relative computational cost compared to 28&ndash;50&times; for system prompting.
+        </p>
+
+    </div>
+
+
+    <div class="container blog main">
+        <h1>Citation</h1>
+<pre><code class="plaintext">@inproceedings{bohacek2026cascading,
+  title={Detecting and Controlling Sycophancy with Cascading Linear Features},
+  author={Bohacek, Maty and Jain, Rishub and Dufour, Nicholas and Leung, Thomas and Bregler, Christoph and Patel, Roma},
+  booktitle={Conference on Language Modeling (COLM)},
+  year={2026}
+}</code></pre>
+    </div>
+
+    <!-- Footer Page -->
+    <footer>
+        <div class="container">
+            <p style="font-size: small;">
+                Last updated March 2026. This website is built on the <a href="https://shikun.io/projects/clarity" style="font-size: small;">Clarity Template</a>.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="clarity/clarity.js"></script>
+    <script src="assets/scripts/main.js"></script>
+</body>
+</html>
