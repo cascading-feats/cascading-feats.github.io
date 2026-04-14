@@ -91,10 +91,8 @@
         <fieldset class="insights-box">
             <legend>Key Insights</legend>
             <ul style="margin-left: 1.5em; margin-bottom: 0;">
-                <li style="margin-bottom: 0.8em;"><b>Cascading data generation isolates behavioral features.</b> Instead of binary contrastive pairs, our iterative pipeline generates a seven-point behavioral spectrum ($\ell \in \{-3, \ldots, +3\}$), retaining only SAE features whose activations scale monotonically with behavior intensity.</li>
-                <li style="margin-bottom: 0.8em;"><b>CLiF features form linearly separable subspaces.</b> Sycophancy features discovered through cascading samples produce geometrically structured encodings where principal components correspond to behavioral intensity, enabling deterministic and continuous scoring.</li>
-                <li style="margin-bottom: 0.8em;"><b>Detection outperforms LLM-as-a-judge baselines.</b> Simple linear classifiers on CLiF vectors achieve 98.3% accuracy, significantly outperforming Gemini 2.5 Pro (60.0&ndash;63.9%) while being fully deterministic and consistent across trials.</li>
-                <li style="margin-bottom: 0.8em;"><b>Steering matches system prompting at 50&times; lower cost.</b> CLiF clamping achieves sycophancy scores competitive with the strongest prompting baselines (0.33 ELEPHANT), while requiring a fraction of the inference compute.</li>
+                <li style="margin-bottom: 0.8em;"><b>Cascading feature generation outperforms contrastive and persona-based approaches.</b> By generating graded behavioral spectra and retaining only monotonically scaling SAE features, our method identifies more robust behavior-related features than contrastive feature selection and persona vectors&mdash;improving both detection accuracy (up to 11 pp) and steering effectiveness.</li>
+                <li style="margin-bottom: 0.8em;"><b>Matches prompt-based steering at a fraction of the cost, with interpretability and consistency guarantees.</b> CLiF clamping achieves sycophancy scores competitive with the strongest system prompting baselines while being less computationally expensive, providing interpretable feature-level explanations, and enabling fully deterministic, consistent scoring across trials.</li>
             </ul>
         </fieldset>
 
