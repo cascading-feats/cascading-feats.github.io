@@ -41,6 +41,7 @@
     src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 </head>
 
 <body onload="if (document.activeElement) document.activeElement.blur();">
@@ -445,22 +446,128 @@
 
     </div>
 
-    <div class="container blog main gray">
+    <div class="container blog extra-large gray">
 
-        <div class="columns-2">
-            <div>
-                <img src="assets/figures/pca-2d.png">
+        <style>
+            .pca-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2vw;
+            }
+            .pca-cell {
+                min-width: 0;
+            }
+            .pca-chart {
+                width: 100%;
+                height: 420px;
+                background: #fff;
+                border-radius: 8px;
+            }
+            @media (max-width: 768px) {
+                .pca-grid {
+                    grid-template-columns: 1fr;
+                }
+                .pca-chart {
+                    height: 350px;
+                }
+            }
+        </style>
+
+        <div class="pca-grid">
+            <div class="pca-cell">
+                <div id="pca-chart-syco" class="pca-chart"></div>
                 <p class="caption">
                     <b>2D Sycophancy Encoding.</b> PCA of sycophancy encodings (44 CLiF features). The first component corresponds to sycophancy intensity; the second to rejection intensity. Neutral responses cluster along the diagonal.
                 </p>
             </div>
-            <div>
-                <img src="assets/figures/pca-2d-full.png">
+            <div class="pca-cell">
+                <div id="pca-chart-all" class="pca-chart"></div>
                 <p class="caption">
                     <b>2D Sycophancy Encoding (Full CLiF).</b> PCA visualization using all CLiF features, showing clear linear separability between sycophantic (green), neutral (blue), and rejecting (red) responses on both train and test sets.
                 </p>
             </div>
         </div>
+
+        <script>
+        (function() {
+            const CLASS_DISPLAY = ["Reject", "Neutral", "Sycophancy"];
+            const COLORS = ["#e74c3c", "#3498db", "#2ecc71"];
+
+            function buildTraces(data) {
+                const traces = [];
+                for (let ci = 0; ci < 3; ci++) {
+                    const pts = data.train.filter(p => p.class_idx === ci);
+                    if (!pts.length) continue;
+                    traces.push({
+                        name: "Train \u2013 " + CLASS_DISPLAY[ci],
+                        x: pts.map(p => p.x),
+                        y: pts.map(p => p.y),
+                        mode: "markers",
+                        type: "scatter",
+                        marker: { color: COLORS[ci], opacity: 0.18, size: 6, line: { width: 0 } },
+                        hovertemplate:
+                            "<b>Train \u2013 " + CLASS_DISPLAY[ci] + "</b><br>" +
+                            "Level: %{customdata[0]}<br>PC1: %{x:.3f}<br>PC2: %{y:.3f}<extra></extra>",
+                        customdata: pts.map(p => [p.level ?? "n/a"]),
+                        legendgroup: CLASS_DISPLAY[ci],
+                    });
+                }
+                for (let ci = 0; ci < 3; ci++) {
+                    const pts = data.test.filter(p => p.class_idx === ci);
+                    if (!pts.length) continue;
+                    traces.push({
+                        name: "Test \u2013 " + CLASS_DISPLAY[ci],
+                        x: pts.map(p => p.x),
+                        y: pts.map(p => p.y),
+                        mode: "markers",
+                        type: "scatter",
+                        marker: { color: COLORS[ci], opacity: 0.92, size: 10, symbol: "circle", line: { color: "#222", width: 1.2 } },
+                        hovertemplate:
+                            "<b>Test \u2013 " + CLASS_DISPLAY[ci] + "</b><br>" +
+                            "Level: %{customdata[0]}<br>PC1: %{x:.3f}<br>PC2: %{y:.3f}<extra></extra>",
+                        customdata: pts.map(p => [p.level ?? "n/a"]),
+                        legendgroup: CLASS_DISPLAY[ci],
+                    });
+                }
+                return traces;
+            }
+
+            function buildLayout(ev1, ev2) {
+                return {
+                    xaxis: {
+                        title: { text: "PC1 (" + (ev1 * 100).toFixed(1) + "%)", font: { size: 13 } },
+                        showgrid: true, gridcolor: "#eee", zeroline: false,
+                    },
+                    yaxis: {
+                        title: { text: "PC2 (" + (ev2 * 100).toFixed(1) + "%)", font: { size: 13 } },
+                        showgrid: true, gridcolor: "#eee", zeroline: false,
+                    },
+                    legend: {
+                        orientation: "h", x: 0.5, xanchor: "center", y: -0.18,
+                        font: { size: 11 }, tracegroupgap: 4,
+                    },
+                    hovermode: "closest",
+                    plot_bgcolor: "#fff",
+                    paper_bgcolor: "#fff",
+                    margin: { t: 16, r: 16, b: 72, l: 52 },
+                };
+            }
+
+            var plotCfg = { responsive: true, displayModeBar: false };
+
+            function renderChart(elId, jsonUrl) {
+                fetch(jsonUrl)
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        var ev = data.explained_variance;
+                        Plotly.newPlot(elId, buildTraces(data), buildLayout(ev[0], ev[1]), plotCfg);
+                    });
+            }
+
+            renderChart("pca-chart-syco", "jsons/pca_syco_syco_combined.json");
+            renderChart("pca-chart-all",  "jsons/pca_all_categories_combined.json");
+        })();
+        </script>
 
     </div>
 
