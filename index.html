@@ -59,7 +59,7 @@
                 <div>
                     <h1 class="title" style="font-weight: 800;"><b style="font-weight: 800;">Detecting and Controlling Sycophancy with Cascading Linear Features</b></h1>
                     <p class="author">
-                        <a href="https://matybohacek.com">Maty Bohacek</a> <sup>1</sup>,
+                        <a href="https://matybohacek.com">Maty Bohacek</a> <sup>1,2</sup>,
                         <a href="https://rishubjain.github.io/">Rishub Jain</a> <sup>2</sup>,
                         <a href="https://scholar.google.com/citations?user=g42kJfIAAAAJ">Nicholas Dufour</a> <sup>2</sup>,
                         <a href="https://research.google/people/thomasleung/">Thomas Leung</a> <sup>2</sup>,
@@ -70,7 +70,7 @@
                         <sup>1</sup> Stanford University &nbsp;&nbsp; <sup>2</sup> Google DeepMind
                     </p>
                     <p class="abstract">
-                        Interpreting and controlling model behaviors through activation steering requires many contrastive sample pairs. We present an iterative data generation pipeline that isolates <b>cascading linear features</b> (CLiF) responsible for a behavior. By identifying features that scale monotonically with behavior intensity using sparse autoencoders, we enable robust detection, deterministic scoring, and interpretable steering of sycophancy in LLMs&mdash;matching or outperforming LLM-as-a-judge and system prompting baselines at a fraction of the computational cost.
+                        Interpreting and controlling model behaviors through activation steering requires many contrastive sample pairs. We present an iterative data generation pipeline that isolates cascading linear features (CLiF) responsible for a behavior. By identifying features that scale monotonically with behavior intensity using sparse autoencoders, we enable robust detection, deterministic scoring, and interpretable steering of sycophancy in LLMs&mdash;matching or outperforming LLM-as-a-judge and system prompting baselines at a fraction of the computational cost.
                     </p>
 
                     <div class="info">
@@ -92,16 +92,17 @@
         <fieldset class="insights-box">
             <legend>Key Insights</legend>
             <ul style="margin-left: 1.5em; margin-bottom: 0;">
-                <li style="margin-bottom: 0.8em;"><b>Cascading feature generation outperforms contrastive and persona-based approaches.</b> By generating graded behavioral spectra and retaining only monotonically scaling SAE features, our method identifies more robust behavior-related features than contrastive feature selection and persona vectors&mdash;improving both detection accuracy (up to 11 pp) and steering effectiveness.</li>
-                <li style="margin-bottom: 0.8em;"><b>Matches prompt-based steering at a fraction of the cost, with interpretability and consistency guarantees.</b> CLiF clamping achieves sycophancy scores competitive with the strongest system prompting baselines while being less computationally expensive, providing interpretable feature-level explanations, and enabling fully deterministic, consistent scoring across trials.</li>
+                <li style="margin-bottom: 0.8em;"><b>Our cascading feature generation outperforms contrastive and <i>Persona Vectors</i>-based approaches.</b> It registers detection accuracy improvements of up to 11 pp with better generalization, and matches steering effectiveness of SOTA system prompting.</li>
+                <li style="margin-bottom: 0.8em;"><b>Unlike opaque steering vectors, CLiF surfaces named, human-readable features driving sycophancy.</b> Rather than a black-box direction in activation space, the method identifies discrete concepts that can be individually inspected and targeted.</li>
+                <li style="margin-bottom: 0.8em;"><b>CLiF yields a deterministic, continuous sycophancy score grounded in model internals.</b> Instead of relying on an external LLM judge, behavior intensity can be read directly off feature activations deterministically and at a fraction of the compute cost.</li>
             </ul>
         </fieldset>
 
         <p class='text'>
-            Interpreting and steering the internal representations of Large Language Models (LLMs) relies on identifying directions in activation space that correspond to learned concepts. Existing steering methods typically construct contrastive pairs to compute steering vectors, but these dense vectors suffer from limitations in quantification, interpretability, and entanglement with unrelated capabilities.
+            Existing methods for behavior detection and mitigation typically construct contrastive pairs to compute steering vectors. However, these dense vectors suffer from limitations in quantification, interpretability, and entanglement with unrelated capabilities.
         </p>
         <p class='text'>
-            We propose a method utilizing SAE features to decompose observed behavioral tendencies into discrete, interpretable features at different detectable strengths. Instead of relying on two contrastive sets of behaviors, we introduce an iterative data generation method that induces degrees of features, from which we select only those that scale linearly with behavior. We call these <b>Cascading Linear Features</b> (CLiF).
+            We propose a method utilizing SAE features to decompose observed behavioral tendencies into discrete, interpretable features at different detectable strengths. Instead of relying on two contrastive sets of behaviors, we introduce an iterative data generation method that induces degrees of features, from which we select only those that scale monotonically and linearly with behavior. We call these Cascading Linear Features (CLiF), and they can be used both for detection and steering.
         </p>
     </div>
 
@@ -118,40 +119,15 @@
 
     <div class="container blog main">
 
-        <h1>Method</h1>
-
         <p class="text">
-            Our method identifies interpretable features within a language model's representations that exhibit a monotonic, cascading relationship with a target behavior. This consists of three stages:
+            We evaluate CLiF on Llama 3.1 8B Instruct using the <i>Anthropic Sycophancy Dataset</i> as well as three out-of-distribution scenario sets (Culture, Non-US Policy, Office Scenarios).
         </p>
 
-        <p class="text">
-            <b>1. Cascading Data Generation.</b> We generate a neutral baseline response for each input prompt and iteratively prompt the model to rewrite each response to exhibit more (or less) of the target behavior. This yields a seven-point spectrum $\ell \in \{-3, -2, -1, 0, +1, +2, +3\}$ for every prompt, validated by Spearman's $\rho = 0.887$ ($p < 0.001$) between steering level and judge score.
-        </p>
+        <p class="text"><b>CLiF vectors produce separable sycophancy representations.</b> The feature space exhibits distinct geometric structure: the first principal component corresponds to sycophancy intensity, while the second corresponds to rejection intensity, with neutral responses clustering along the diagonal.</p>
 
-        <p class="text">
-            <b>2. Feature Selection.</b> We extract activations and decompose them using an SAE, then retain only concepts whose mean activations are monotonically non-decreasing along each half-spectrum. The union of behavior-aligned ($\mathcal{F}^+$) and counter-aligned ($\mathcal{F}^-$) features forms the CLiF set $\mathcal{F}_{\text{CLiF}}$.
-        </p>
+        <p class="text"><b>CLiF generalizes to unseen domains.</b> PCA encodings over out-of-distribution samples confirm that the geometric separability observed in training holds across Culture, Non-US Policy, and Office Scenario datasets.</p>
 
-        <p class="text">
-            <b>3. Detection &amp; Steering.</b> For detection, we train linear classifiers on CLiF-filtered SAE activations. For steering, we intervene on CLiF features during the forward pass via <em>clamping</em> (setting activations to zero) or <em>negative steering</em> (subtracting feature directions).
-        </p>
-
-    </div>
-
-    <div class="container blog main">
-        <h1>Results</h1>
-
-        <p class="text">
-            We evaluate CLiF on Llama 3.1 8B Instruct using the Anthropic Sycophancy Dataset as well as three out-of-distribution scenario sets (Culture, Non-US Policy, Office Scenarios).
-        </p>
-
-        <ul style="margin-left: 3em !important;">
-            <li><p class="text"><b>CLiF vectors produce separable sycophancy representations.</b> The feature space exhibits distinct geometric structure: the first principal component corresponds to sycophancy intensity, while the second corresponds to rejection intensity, with neutral responses clustering along the diagonal.</p></li>
-
-            <li><p class="text"><b>98.3% detection accuracy with simple linear probes.</b> SVMs trained on CLiF vectors significantly outperform LLM-as-a-judge baselines (Gemini 2.5 Pro at 60.0&ndash;63.9%), while achieving complete consistency and zero formatting errors across trials.</p></li>
-
-            <li><p class="text"><b>CLiF generalizes to unseen domains.</b> PCA encodings over out-of-distribution samples confirm that the geometric separability observed in training holds across Culture, Non-US Policy, and Office Scenario datasets.</p></li>
-        </ul>
+        <p class="text"><b>98.3% detection accuracy with simple linear probes.</b> SVMs trained on CLiF vectors significantly outperform LLM-as-a-judge baselines (Gemini 2.5 Pro at 60.0&ndash;63.9%), while achieving complete consistency and zero formatting errors across trials.</p>
 
     </div>
 
@@ -440,11 +416,9 @@
 
     <div class="container blog main">
 
-        <ul style="margin-left: 3em !important;">
-            <li><p class="text"><b>Steering matches system prompting at drastically lower cost.</b> CLiF clamping achieves a sycophancy score of 0.33 (ELEPHANT), effectively matching the strongest system prompting baseline (0.33) and outperforming dense Persona Vectors (0.43), while requiring only 0.5&times; relative cost compared to the 28&ndash;50&times; cost of extended system prompts.</p></li>
+        <p class="text"><b>Steering matches system prompting at drastically lower cost.</b> CLiF clamping achieves a sycophancy score of 0.33 (ELEPHANT), effectively matching the strongest system prompting baseline (0.33) and outperforming dense Persona Vectors (0.43), while requiring only 0.5&times; relative cost compared to the 28&ndash;50&times; cost of extended system prompts.</p>
 
-            <li><p class="text"><b>CLiF outperforms contrastive feature extraction.</b> Compared to standard contrastive feature extraction, CLiF improves detection accuracy by up to 11 percentage points and reduces steering sycophancy from 0.45&ndash;0.47 to 0.33 ELEPHANT score.</p></li>
-        </ul>
+        <p class="text"><b>CLiF outperforms contrastive feature extraction.</b> Compared to standard contrastive feature extraction, CLiF improves detection accuracy by up to 11 percentage points and reduces steering sycophancy from 0.45&ndash;0.47 to 0.33 ELEPHANT score.</p>
 
     </div>
 
@@ -577,8 +551,6 @@
     </div>
 
     <div class="container blog main">
-
-        <h1>Qualitative Steering Examples</h1>
 
         <p class="text">
             The granular control enabled by CLiF's sparse dictionary allows for surgical interventions. In scenarios where conventional steering vectors or system prompts fail to mitigate sycophancy (or inadvertently induce refusal), CLiF's targeted clamping of specific sycophancy features successfully neutralizes the behavior while maintaining response coherence.
