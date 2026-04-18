@@ -434,9 +434,6 @@ div.container.blog p.text {
   padding: 1.5vh 0;
   font-family: "Charter", sans-serif;
 }
-div.container.blog p.text:last-child {
-  padding-bottom: 0;
-}
 div.container.blog ul, div.container.blog ol {
   font-family: inherit;
   font-style: inherit;
