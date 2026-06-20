@@ -20,14 +20,39 @@
                 '<span class="cv-tooltip-swatch"></span>' +
                 '<span class="cv-tooltip-name-text"></span>' +
             '</div>' +
+            '<div class="cv-tooltip-status">' +
+                '<span class="cv-tooltip-status-icon"></span>' +
+                '<span class="cv-tooltip-status-text"></span>' +
+            '</div>' +
             '<div class="cv-tooltip-desc"></div>' +
             '<div class="cv-tooltip-act"></div>';
         document.body.appendChild(tip);
 
         var swatchEl = tip.querySelector('.cv-tooltip-swatch');
         var nameEl = tip.querySelector('.cv-tooltip-name-text');
+        var statusEl = tip.querySelector('.cv-tooltip-status');
+        var statusIconEl = tip.querySelector('.cv-tooltip-status-icon');
+        var statusTextEl = tip.querySelector('.cv-tooltip-status-text');
         var descEl = tip.querySelector('.cv-tooltip-desc');
         var actEl = tip.querySelector('.cv-tooltip-act');
+
+        // Read each concept's adequacy status straight from the legend so the
+        // tooltip stays in sync with it (single source of truth). Maps e.g.
+        // "Concept 97" -> { icon: "✓", text: "Adequate", color: "rgb(...)" }.
+        var statusByConcept = {};
+        var legendItems = document.querySelectorAll('.concepts-viz .cv-legend-item');
+        for (var k = 0; k < legendItems.length; k++) {
+            var legNameEl = legendItems[k].querySelector('.cv-legend-name');
+            var legStatusEl = legendItems[k].querySelector('.cv-legend-status');
+            if (!legNameEl || !legStatusEl) continue;
+            var iconNode = legStatusEl.querySelector('.cv-status-icon');
+            var textNode = legStatusEl.querySelector('span:not(.cv-status-icon)');
+            statusByConcept[legNameEl.textContent.trim()] = {
+                icon: iconNode ? iconNode.textContent.trim() : '',
+                text: textNode ? textNode.textContent.trim() : legStatusEl.textContent.trim(),
+                color: legStatusEl.style.color || ''
+            };
+        }
 
         // Parse "Concept 97: Formal honorific salutations ... (activation: 0.652)"
         function parseTip(raw) {
@@ -55,6 +80,15 @@
             nameEl.textContent = info.name;
             nameEl.style.color = color;
             tip.style.borderTopColor = color;
+            var status = statusByConcept[info.name];
+            if (status) {
+                statusIconEl.textContent = status.icon;
+                statusTextEl.textContent = status.text;
+                statusEl.style.color = status.color;
+                statusEl.style.display = '';
+            } else {
+                statusEl.style.display = 'none';
+            }
             descEl.textContent = info.desc;
             descEl.style.display = info.desc ? '' : 'none';
             actEl.textContent = info.act ? ('Activation: ' + info.act) : '';
