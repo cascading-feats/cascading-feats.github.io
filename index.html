@@ -111,6 +111,11 @@
 
         <style>
             .clif-figure {
+                /* Gutter/gap live here so both the grid and the caption can
+                   read them. The gutter is sized to fit the longest row-label
+                   word ("Construction") at the label font size. */
+                --clif-gutter: clamp(84px, 9vw, 106px);
+                --clif-gap: 12px;
                 font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif !important;
                 padding: 6px 0 2px;
             }
@@ -119,23 +124,19 @@
             /* Card grid is centered; row/column labels sit in the side/bottom
                gutters, positioned relative to the centered cards. */
             .clif-grid {
-                /* Slim gutters keep the labels compact so the figures get
-                   most of the width. Gutter is sized to fit the longest
-                   row-label word at the label font size. */
-                --clif-gutter: clamp(72px, 6.5vw, 84px);
                 display: grid;
                 grid-template-columns: var(--clif-gutter) minmax(0, 1fr) minmax(0, 1fr);
                 grid-template-rows: auto auto auto;
-                column-gap: 12px;
+                column-gap: var(--clif-gap);
                 row-gap: 14px;
                 align-items: center;
             }
 
-            /* Row labels (left gutter) */
+            /* Row labels (left gutter) — same size as the column labels */
             .clif-rowlabel {
                 font-weight: 700 !important;
-                font-size: clamp(9.5px, 0.9vw, 11px) !important;
-                line-height: 1.2 !important;
+                font-size: clamp(12px, 1.3vw, 15px) !important;
+                line-height: 1.25 !important;
                 color: #2d3436 !important;
                 text-align: right;
                 overflow-wrap: break-word;
@@ -152,6 +153,13 @@
                 padding: 4px 4px 0 !important;
             }
             .clif-collabel .clif-ours { color: #b85c41; }
+
+            /* Caption spans only the two figures, not the row-label gutter. */
+            .clif-caption {
+                margin-left: calc(var(--clif-gutter) + var(--clif-gap));
+                margin-right: 0;
+                font-family: "Charter", serif;
+            }
 
             /* Figure cards */
             .clif-cell {
@@ -183,10 +191,13 @@
                 .clif-grid {
                     grid-template-columns: var(--clif-gutter) minmax(0, 1fr) minmax(0, 1fr) var(--clif-gutter);
                 }
+                /* Centered layout: balance the caption on both sides. */
+                .clif-caption { margin-right: calc(var(--clif-gutter) + var(--clif-gap)); }
             }
 
             @media screen and (max-width: 600px) {
-                .clif-grid { --clif-gutter: clamp(60px, 17vw, 78px); column-gap: 8px; row-gap: 10px; }
+                .clif-figure { --clif-gutter: clamp(78px, 20vw, 90px); --clif-gap: 8px; }
+                .clif-grid { row-gap: 10px; }
                 .clif-cell { border-radius: 10px; }
             }
 
@@ -212,10 +223,10 @@
                 <div class="clif-collabel" style="grid-column: 2; grid-row: 3;">Contrastive Feature Extraction</div>
                 <div class="clif-collabel" style="grid-column: 3; grid-row: 3;">Cascading Linear Feature Extraction&nbsp;<span class="clif-ours">(Ours)</span></div>
             </div>
+            <p class="caption clif-caption">
+                <b>Cascading Linear Feature Extraction.</b> (Left) Contrastive feature extraction compares neutral and behavior-exhibiting responses to compute a single steering vector from their activation differences. (Right) Our cascading approach iteratively regenerates responses from a neutral starting point towards and away from the target behavior. By identifying features that exhibit monotonic cascading effects across regenerations (green trajectory), we extract more robust and interpretable steering vectors.
+            </p>
         </div>
-        <p class="caption">
-            <b>Cascading Linear Feature Extraction.</b> (Left) Contrastive feature extraction compares neutral and behavior-exhibiting responses to compute a single steering vector from their activation differences. (Right) Our cascading approach iteratively regenerates responses from a neutral starting point towards and away from the target behavior. By identifying features that exhibit monotonic cascading effects across regenerations (green trajectory), we extract more robust and interpretable steering vectors.
-        </p>
 
     </div>
 
