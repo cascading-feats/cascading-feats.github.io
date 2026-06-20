@@ -195,19 +195,28 @@
                 .clif-caption { margin-right: calc(var(--clif-gutter) + var(--clif-gap)); }
             }
 
-            /* Mobile / tablet (below the centered desktop layout): hide the
-               row labels and let the two figures span the full width. */
+            /* Mobile / tablet (below the centered desktop layout): stack into
+               a single full-width column, grouped by method. Contrastive
+               (its two figures + label) comes first, then the cascading
+               segment below it. Flex lets us reorder via `order`, ignoring
+               the desktop grid placement. */
             @media screen and (max-width: 768px) {
-                .clif-figure { --clif-gap: 10px; }
                 .clif-grid {
-                    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-                    row-gap: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: stretch;
+                    gap: 10px;
                 }
                 .clif-rowlabel { display: none; }
-                .clif-left  { grid-column: 1 !important; }
-                .clif-right { grid-column: 2 !important; }
+                .clif-left.clif-top       { order: 1; }
+                .clif-left.clif-bot       { order: 2; }
+                .clif-collabel.clif-left  { order: 3; }
+                .clif-right.clif-top      { order: 4; margin-top: 22px; }
+                .clif-right.clif-bot      { order: 5; }
+                .clif-collabel.clif-right { order: 6; }
+                .clif-collabel { font-size: 15px !important; }
                 .clif-caption { margin-left: 0; margin-right: 0; }
-                .clif-cell { border-radius: 10px; }
+                .clif-cell { border-radius: 12px; }
             }
 
             @media (prefers-reduced-motion: reduce) {
@@ -220,13 +229,13 @@
             <div class="clif-grid">
                 <!-- Row 1 — Data Generation -->
                 <div class="clif-rowlabel" style="grid-column: 1; grid-row: 1;">Data Generation</div>
-                <div class="clif-cell clif-left" style="grid-column: 2; grid-row: 1;"><img src="assets/figures/left-top.png" alt="Contrastive feature extraction: data generation"></div>
-                <div class="clif-cell clif-right" style="grid-column: 3; grid-row: 1;"><img src="assets/figures/right-top.png" alt="Cascading linear feature extraction: data generation"></div>
+                <div class="clif-cell clif-left clif-top" style="grid-column: 2; grid-row: 1;"><img src="assets/figures/left-top.png" alt="Contrastive feature extraction: data generation"></div>
+                <div class="clif-cell clif-right clif-top" style="grid-column: 3; grid-row: 1;"><img src="assets/figures/right-top.png" alt="Cascading linear feature extraction: data generation"></div>
 
                 <!-- Row 2 — Steering Vector Construction -->
                 <div class="clif-rowlabel" style="grid-column: 1; grid-row: 2;">Steering Vector Construction</div>
-                <div class="clif-cell clif-left" style="grid-column: 2; grid-row: 2;"><img src="assets/figures/left-bottom.png" alt="Contrastive feature extraction: steering vector construction"></div>
-                <div class="clif-cell clif-right" style="grid-column: 3; grid-row: 2;"><img src="assets/figures/right-bottom.png" alt="Cascading linear feature extraction: steering vector construction"></div>
+                <div class="clif-cell clif-left clif-bot" style="grid-column: 2; grid-row: 2;"><img src="assets/figures/left-bottom.png" alt="Contrastive feature extraction: steering vector construction"></div>
+                <div class="clif-cell clif-right clif-bot" style="grid-column: 3; grid-row: 2;"><img src="assets/figures/right-bottom.png" alt="Cascading linear feature extraction: steering vector construction"></div>
 
                 <!-- Row 3 — Column labels -->
                 <div class="clif-collabel clif-left" style="grid-column: 2; grid-row: 3;">Contrastive Feature Extraction</div>
