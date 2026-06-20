@@ -112,16 +112,16 @@
         <style>
             .clif-figure {
                 font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif !important;
-                border: 1.5px solid #dfe6e9;
-                border-radius: 14px;
-                padding: 22px;
-                background: #fff;
+                padding: 6px 0 2px;
             }
             .clif-figure * { box-sizing: border-box; }
 
+            /* Card grid is centered; row/column labels sit in the side/bottom
+               gutters, positioned relative to the centered cards. */
             .clif-grid {
+                --clif-gutter: clamp(88px, 13vw, 158px);
                 display: grid;
-                grid-template-columns: minmax(0, auto) 1fr 1fr;
+                grid-template-columns: var(--clif-gutter) minmax(0, 1fr) minmax(0, 1fr);
                 grid-template-rows: auto auto auto;
                 column-gap: 18px;
                 row-gap: 16px;
@@ -135,8 +135,6 @@
                 line-height: 1.25 !important;
                 color: #2d3436 !important;
                 text-align: right;
-                max-width: 9.5em;
-                justify-self: end;
                 padding: 0 !important;
             }
 
@@ -175,11 +173,17 @@
                 padding: 0 !important;
             }
 
+            /* Center the cards on wider screens by balancing the left
+               row-label gutter with an equal empty gutter on the right. */
+            @media screen and (min-width: 769px) {
+                .clif-grid {
+                    grid-template-columns: var(--clif-gutter) minmax(0, 1fr) minmax(0, 1fr) var(--clif-gutter);
+                }
+            }
+
             @media screen and (max-width: 600px) {
-                .clif-figure { padding: 14px; }
-                .clif-grid { column-gap: 10px; row-gap: 10px; }
-                .clif-rowlabel { max-width: 6.5em; }
-                .clif-cell, .clif-figure { border-radius: 10px; }
+                .clif-grid { --clif-gutter: clamp(82px, 24vw, 116px); column-gap: 10px; row-gap: 10px; }
+                .clif-cell { border-radius: 10px; }
             }
 
             @media (prefers-reduced-motion: reduce) {
@@ -191,19 +195,18 @@
         <div class="clif-figure">
             <div class="clif-grid">
                 <!-- Row 1 — Data Generation -->
-                <div class="clif-rowlabel">Data Generation</div>
-                <div class="clif-cell clif-left"><img src="assets/figures/left-top.png" alt="Contrastive feature extraction: data generation"></div>
-                <div class="clif-cell clif-right"><img src="assets/figures/right-top.png" alt="Cascading linear feature extraction: data generation"></div>
+                <div class="clif-rowlabel" style="grid-column: 1; grid-row: 1;">Data Generation</div>
+                <div class="clif-cell clif-left" style="grid-column: 2; grid-row: 1;"><img src="assets/figures/left-top.png" alt="Contrastive feature extraction: data generation"></div>
+                <div class="clif-cell clif-right" style="grid-column: 3; grid-row: 1;"><img src="assets/figures/right-top.png" alt="Cascading linear feature extraction: data generation"></div>
 
                 <!-- Row 2 — Steering Vector Construction -->
-                <div class="clif-rowlabel">Steering Vector Construction</div>
-                <div class="clif-cell clif-left"><img src="assets/figures/left-bottom.png" alt="Contrastive feature extraction: steering vector construction"></div>
-                <div class="clif-cell clif-right"><img src="assets/figures/right-bottom.png" alt="Cascading linear feature extraction: steering vector construction"></div>
+                <div class="clif-rowlabel" style="grid-column: 1; grid-row: 2;">Steering Vector Construction</div>
+                <div class="clif-cell clif-left" style="grid-column: 2; grid-row: 2;"><img src="assets/figures/left-bottom.png" alt="Contrastive feature extraction: steering vector construction"></div>
+                <div class="clif-cell clif-right" style="grid-column: 3; grid-row: 2;"><img src="assets/figures/right-bottom.png" alt="Cascading linear feature extraction: steering vector construction"></div>
 
                 <!-- Row 3 — Column labels -->
-                <div aria-hidden="true"></div>
-                <div class="clif-collabel">Contrastive Feature Extraction</div>
-                <div class="clif-collabel">Cascading Linear Feature Extraction <span class="clif-ours">(Ours)</span></div>
+                <div class="clif-collabel" style="grid-column: 2; grid-row: 3;">Contrastive Feature Extraction</div>
+                <div class="clif-collabel" style="grid-column: 3; grid-row: 3;">Cascading Linear Feature Extraction <span class="clif-ours">(Ours)</span></div>
             </div>
         </div>
         <p class="caption">
