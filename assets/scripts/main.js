@@ -125,6 +125,14 @@
             el.addEventListener('mousemove', move);
             el.addEventListener('mouseleave', hide);
         }
+
+        // On touch devices the tooltip is opened by a tap (a synthesized
+        // mouseenter), but no mouseleave fires when the user then scrolls, so the
+        // position:fixed tooltip stays pinned to the screen. Dismiss it on any
+        // scroll (capture phase also catches nested scroll containers) and as soon
+        // as a new touch gesture begins.
+        window.addEventListener('scroll', hide, { capture: true, passive: true });
+        window.addEventListener('touchstart', hide, { capture: true, passive: true });
     }
 
     if (document.readyState === 'loading') {
