@@ -860,11 +860,50 @@
             .concepts-viz .cv-response-text .cv-hl {
                 padding: 2px 4px;
                 border-radius: 3px;
-                cursor: help;
+                cursor: pointer;
                 transition: all 0.2s ease;
             }
             .concepts-viz .cv-response-text .cv-hl:hover {
                 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            /* Color-matched hover tooltip identifying which concept a token belongs to */
+            .cv-tooltip {
+                position: fixed;
+                z-index: 9999;
+                max-width: 280px;
+                background: #ffffff;
+                border: 1px solid #dfe6e9;
+                border-top: 3px solid #2d3436;
+                border-radius: 8px;
+                box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+                padding: 10px 12px;
+                pointer-events: none;
+            }
+            .cv-tooltip .cv-tooltip-name {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: -0.2px;
+            }
+            .cv-tooltip .cv-tooltip-swatch {
+                width: 12px;
+                height: 12px;
+                border-radius: 3px;
+                flex-shrink: 0;
+            }
+            .cv-tooltip .cv-tooltip-desc {
+                font-size: 12.5px;
+                line-height: 1.4;
+                color: #636e72;
+                margin-top: 5px;
+            }
+            .cv-tooltip .cv-tooltip-act {
+                font-size: 11.5px;
+                color: #b2bec3;
+                margin-top: 6px;
+                font-variant-numeric: tabular-nums;
             }
             .concepts-viz .cv-legend {
                 flex: 0 0 340px;
