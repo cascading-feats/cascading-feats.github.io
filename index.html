@@ -109,8 +109,102 @@
 
     <div class="container blog extra-large gray">
 
-        <div style="border: 1.5px solid #dfe6e9; border-radius: 10px; overflow: hidden; padding: 18px; background: #fff;">
-            <img src="assets/figures/hero.png" style="display: block; padding: 0 !important;">
+        <style>
+            .clif-figure {
+                font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif !important;
+                border: 1.5px solid #dfe6e9;
+                border-radius: 14px;
+                padding: 22px;
+                background: #fff;
+            }
+            .clif-figure * { box-sizing: border-box; }
+
+            .clif-grid {
+                display: grid;
+                grid-template-columns: minmax(0, auto) 1fr 1fr;
+                grid-template-rows: auto auto auto;
+                column-gap: 18px;
+                row-gap: 16px;
+                align-items: center;
+            }
+
+            /* Row labels (left gutter) */
+            .clif-rowlabel {
+                font-weight: 700 !important;
+                font-size: clamp(13px, 1.5vw, 18px) !important;
+                line-height: 1.25 !important;
+                color: #2d3436 !important;
+                text-align: right;
+                max-width: 9.5em;
+                justify-self: end;
+                padding: 0 !important;
+            }
+
+            /* Column labels (bottom) */
+            .clif-collabel {
+                font-weight: 700 !important;
+                font-size: clamp(13px, 1.5vw, 18px) !important;
+                line-height: 1.25 !important;
+                color: #2d3436 !important;
+                text-align: center;
+                padding: 2px 4px 0 !important;
+            }
+            .clif-collabel .clif-ours { color: #b85c41; }
+
+            /* Figure cards */
+            .clif-cell {
+                position: relative;
+                border-radius: 14px;
+                overflow: hidden;
+                box-shadow: inset 0 0 0 1.5px #dfe6e9, 0 2px 8px rgba(45, 52, 54, 0.06);
+                transition: transform .28s cubic-bezier(.2, .7, .2, 1), box-shadow .28s ease;
+                will-change: transform;
+            }
+            .clif-cell.clif-left  { background: #F5F7FA; }
+            .clif-cell.clif-right { background: #F4F8F4; }
+            .clif-cell:hover {
+                transform: translateY(-5px) scale(1.025);
+                box-shadow: inset 0 0 0 1.5px #cfd8dc, 0 16px 34px rgba(45, 52, 54, 0.16);
+                z-index: 3;
+            }
+            .clif-cell img {
+                display: block;
+                width: 100%;
+                height: auto;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            @media screen and (max-width: 600px) {
+                .clif-figure { padding: 14px; }
+                .clif-grid { column-gap: 10px; row-gap: 10px; }
+                .clif-rowlabel { max-width: 6.5em; }
+                .clif-cell, .clif-figure { border-radius: 10px; }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .clif-cell { transition: box-shadow .2s ease; }
+                .clif-cell:hover { transform: none; }
+            }
+        </style>
+
+        <div class="clif-figure">
+            <div class="clif-grid">
+                <!-- Row 1 — Data Generation -->
+                <div class="clif-rowlabel">Data Generation</div>
+                <div class="clif-cell clif-left"><img src="assets/figures/left-top.png" alt="Contrastive feature extraction: data generation"></div>
+                <div class="clif-cell clif-right"><img src="assets/figures/right-top.png" alt="Cascading linear feature extraction: data generation"></div>
+
+                <!-- Row 2 — Steering Vector Construction -->
+                <div class="clif-rowlabel">Steering Vector Construction</div>
+                <div class="clif-cell clif-left"><img src="assets/figures/left-bottom.png" alt="Contrastive feature extraction: steering vector construction"></div>
+                <div class="clif-cell clif-right"><img src="assets/figures/right-bottom.png" alt="Cascading linear feature extraction: steering vector construction"></div>
+
+                <!-- Row 3 — Column labels -->
+                <div aria-hidden="true"></div>
+                <div class="clif-collabel">Contrastive Feature Extraction</div>
+                <div class="clif-collabel">Cascading Linear Feature Extraction <span class="clif-ours">(Ours)</span></div>
+            </div>
         </div>
         <p class="caption">
             <b>Cascading Linear Feature Extraction.</b> (Left) Contrastive feature extraction compares neutral and behavior-exhibiting responses to compute a single steering vector from their activation differences. (Right) Our cascading approach iteratively regenerates responses from a neutral starting point towards and away from the target behavior. By identifying features that exhibit monotonic cascading effects across regenerations (green trajectory), we extract more robust and interpretable steering vectors.
