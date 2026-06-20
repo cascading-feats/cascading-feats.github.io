@@ -107,7 +107,7 @@
         </p>
     </div>
 
-    <div class="container blog extra-large gray">
+    <div class="container blog extra-extra-large gray">
 
         <style>
             .clif-figure {
@@ -119,33 +119,37 @@
             /* Card grid is centered; row/column labels sit in the side/bottom
                gutters, positioned relative to the centered cards. */
             .clif-grid {
-                --clif-gutter: clamp(88px, 13vw, 158px);
+                /* Slim gutters keep the labels compact so the figures get
+                   most of the width. Gutter is sized to fit the longest
+                   row-label word at the label font size. */
+                --clif-gutter: clamp(72px, 6.5vw, 84px);
                 display: grid;
                 grid-template-columns: var(--clif-gutter) minmax(0, 1fr) minmax(0, 1fr);
                 grid-template-rows: auto auto auto;
-                column-gap: 18px;
-                row-gap: 16px;
+                column-gap: 12px;
+                row-gap: 14px;
                 align-items: center;
             }
 
             /* Row labels (left gutter) */
             .clif-rowlabel {
                 font-weight: 700 !important;
-                font-size: clamp(13px, 1.5vw, 18px) !important;
-                line-height: 1.25 !important;
+                font-size: clamp(9.5px, 0.9vw, 11px) !important;
+                line-height: 1.2 !important;
                 color: #2d3436 !important;
                 text-align: right;
+                overflow-wrap: break-word;
                 padding: 0 !important;
             }
 
             /* Column labels (bottom) */
             .clif-collabel {
                 font-weight: 700 !important;
-                font-size: clamp(13px, 1.5vw, 18px) !important;
+                font-size: clamp(12px, 1.3vw, 15px) !important;
                 line-height: 1.25 !important;
                 color: #2d3436 !important;
                 text-align: center;
-                padding: 2px 4px 0 !important;
+                padding: 4px 4px 0 !important;
             }
             .clif-collabel .clif-ours { color: #b85c41; }
 
@@ -182,7 +186,7 @@
             }
 
             @media screen and (max-width: 600px) {
-                .clif-grid { --clif-gutter: clamp(82px, 24vw, 116px); column-gap: 10px; row-gap: 10px; }
+                .clif-grid { --clif-gutter: clamp(60px, 17vw, 78px); column-gap: 8px; row-gap: 10px; }
                 .clif-cell { border-radius: 10px; }
             }
 
@@ -206,7 +210,7 @@
 
                 <!-- Row 3 — Column labels -->
                 <div class="clif-collabel" style="grid-column: 2; grid-row: 3;">Contrastive Feature Extraction</div>
-                <div class="clif-collabel" style="grid-column: 3; grid-row: 3;">Cascading Linear Feature Extraction <span class="clif-ours">(Ours)</span></div>
+                <div class="clif-collabel" style="grid-column: 3; grid-row: 3;">Cascading Linear Feature Extraction&nbsp;<span class="clif-ours">(Ours)</span></div>
             </div>
         </div>
         <p class="caption">
