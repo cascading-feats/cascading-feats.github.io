@@ -195,9 +195,18 @@
                 .clif-caption { margin-right: calc(var(--clif-gutter) + var(--clif-gap)); }
             }
 
-            @media screen and (max-width: 600px) {
-                .clif-figure { --clif-gutter: clamp(78px, 20vw, 90px); --clif-gap: 8px; }
-                .clif-grid { row-gap: 10px; }
+            /* Mobile / tablet (below the centered desktop layout): hide the
+               row labels and let the two figures span the full width. */
+            @media screen and (max-width: 768px) {
+                .clif-figure { --clif-gap: 10px; }
+                .clif-grid {
+                    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                    row-gap: 10px;
+                }
+                .clif-rowlabel { display: none; }
+                .clif-left  { grid-column: 1 !important; }
+                .clif-right { grid-column: 2 !important; }
+                .clif-caption { margin-left: 0; margin-right: 0; }
                 .clif-cell { border-radius: 10px; }
             }
 
@@ -220,8 +229,8 @@
                 <div class="clif-cell clif-right" style="grid-column: 3; grid-row: 2;"><img src="assets/figures/right-bottom.png" alt="Cascading linear feature extraction: steering vector construction"></div>
 
                 <!-- Row 3 — Column labels -->
-                <div class="clif-collabel" style="grid-column: 2; grid-row: 3;">Contrastive Feature Extraction</div>
-                <div class="clif-collabel" style="grid-column: 3; grid-row: 3;">Cascading Linear Feature Extraction&nbsp;<span class="clif-ours">(Ours)</span></div>
+                <div class="clif-collabel clif-left" style="grid-column: 2; grid-row: 3;">Contrastive Feature Extraction</div>
+                <div class="clif-collabel clif-right" style="grid-column: 3; grid-row: 3;">Cascading Linear Feature Extraction&nbsp;<span class="clif-ours">(Ours)</span></div>
             </div>
             <p class="caption clif-caption">
                 <b>Cascading Linear Feature Extraction.</b> (Left) Contrastive feature extraction compares neutral and behavior-exhibiting responses to compute a single steering vector from their activation differences. (Right) Our cascading approach iteratively regenerates responses from a neutral starting point towards and away from the target behavior. By identifying features that exhibit monotonic cascading effects across regenerations (green trajectory), we extract more robust and interpretable steering vectors.
