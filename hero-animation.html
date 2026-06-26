@@ -106,20 +106,20 @@
         <svg class="vec" width="800" height="735" viewBox="0 0 800 735">
           <defs>
             <!-- open "two-tick" chevron heads (not filled triangles) -->
-            <marker id="chevD" markerWidth="14" markerHeight="14" refX="5.6" refY="5.6"
+            <marker id="chevD" markerWidth="15" markerHeight="15" refX="5.8" refY="5.8"
                     orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M1.2,1.3 L6.6,5.6 L1.2,9.9" fill="none" stroke="#333"
-                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.2,1.2 L6.9,5.8 L1.2,10.4" fill="none" stroke="#333"
+                    stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
             </marker>
             <marker id="chevA" markerWidth="16" markerHeight="16" refX="6.4" refY="6.4"
                     orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M1.4,1.5 L7.6,6.4 L1.4,11.3" fill="none" stroke="var(--axis)"
-                    stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.4,1.4 L7.6,6.4 L1.4,11.4" fill="none" stroke="var(--axis)"
+                    stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
             </marker>
           </defs>
 
           <!-- connector arrows: identical shape between every box, in the left margin -->
-          <g id="arrows" fill="none" stroke="#333" stroke-width="3.2" stroke-linecap="round">
+          <g id="arrows" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round">
             <path class="arw a0" d="M50 78  C 38 88,  38 95,  48 103" marker-end="url(#chevD)"/>
             <path class="arw a1" d="M50 165 C 38 175, 38 182, 48 190" marker-end="url(#chevD)"/>
             <path class="arw a2" d="M50 252 C 38 262, 38 269, 48 277" marker-end="url(#chevD)"/>
@@ -127,16 +127,16 @@
           </g>
 
           <!-- plot axes -->
-          <g stroke="var(--axis)" stroke-width="2.8" stroke-linecap="round" fill="none">
+          <g stroke="var(--axis)" stroke-width="3.6" stroke-linecap="round" fill="none">
             <path d="M98 690 L98 532" marker-end="url(#chevA)"/>
             <path d="M98 690 L699 690" marker-end="url(#chevA)"/>
           </g>
 
           <!-- feature curves (paths filled in by JS) -->
           <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path id="gA" stroke="var(--curve-black)" stroke-width="3"/>
-            <path id="gB" stroke="var(--curve-black)" stroke-width="3"/>
-            <path id="red" stroke="var(--red)" stroke-width="3"/>
+            <path id="gA" stroke="var(--curve-black)" stroke-width="3.6"/>
+            <path id="gB" stroke="var(--curve-black)" stroke-width="3.6"/>
+            <path id="red" stroke="var(--red)" stroke-width="3.6"/>
           </g>
         </svg>
 
@@ -205,7 +205,7 @@
           <div class="xtick" style="left:572px;top:700px;">L3</div>
 
           <!-- highlighted curve label -->
-          <div class="clabel build" id="clabel" style="left:612px;top:586px;">
+          <div class="clabel build" id="clabel" style="left:632px;top:568px;">
             <b>[feat&nbsp;097]</b><br>glazing
           </div>
         </div>
@@ -345,9 +345,9 @@
     var gcol = mix(BLACK, GRAY, hp);
     elGA.setAttribute('stroke', gcol);
     elGB.setAttribute('stroke', gcol);
-    elGA.style.strokeWidth = lerp(3, 2.6, hp);
-    elGB.style.strokeWidth = lerp(3, 2.6, hp);
-    elRed.style.strokeWidth = lerp(3, 4.6, hp);
+    elGA.style.strokeWidth = lerp(3.6, 3.2, hp);
+    elGB.style.strokeWidth = lerp(3.6, 3.2, hp);
+    elRed.style.strokeWidth = lerp(3.6, 5.4, hp);
     setFade(cards.label, hp*m);
   }
 
@@ -360,7 +360,7 @@
     elRed.style.strokeDashoffset=0; elGA.style.strokeDashoffset=0; elGB.style.strokeDashoffset=0;
     elRed.style.opacity=elGA.style.opacity=elGB.style.opacity=1;
     elGA.setAttribute('stroke','rgb(154,160,164)'); elGB.setAttribute('stroke','rgb(154,160,164)');
-    elGA.style.strokeWidth=2.6; elGB.style.strokeWidth=2.6; elRed.style.strokeWidth=4.6;
+    elGA.style.strokeWidth=3.2; elGB.style.strokeWidth=3.2; elRed.style.strokeWidth=5.4;
   }
 
   /* ---------- run loop ---------- */
