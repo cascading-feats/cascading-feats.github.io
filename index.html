@@ -23,6 +23,45 @@
     <link rel="stylesheet" type="text/css" media="all" href="clarity/clarity.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/foundation.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+
+    <style id="hero-anim-style">
+    /* ===== Animated hero — self-contained JS/SVG recreation of assets/figures/hero.gif.
+       Everything is scoped under #hero-anim so it cannot affect the rest of the page. ===== */
+    #hero-anim{
+      --bg:#e0e4e6; --ink:#1c1c1e; --red:#b81f12; --axis:#8c8c8c;
+      --l0-border:#4a4a4a; --l1-border:#d3795f; --l2-border:#bc3c25; --curve-black:#1d1d1f;
+      position:relative; width:100%; height:0; padding-bottom:91.875%; /* 735/800 keeps the GIF aspect */
+      overflow:hidden; background:var(--bg);
+      font-family:"HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    #hero-anim *,#hero-anim *::before,#hero-anim *::after{box-sizing:border-box;}
+    #hero-anim .ha-stage{position:absolute;top:0;left:0;width:800px;height:735px;transform-origin:top left;}
+    #hero-anim svg.vec{position:absolute;top:0;left:0;width:800px;height:735px;}        /* overrides global svg{width:100%} */
+    #hero-anim .card{position:absolute;display:flex;align-items:center;gap:12px;padding:0 18px;
+      border-radius:13px;font-size:19.5px;line-height:1.25;letter-spacing:.1px;white-space:nowrap;
+      overflow:hidden;color:var(--ink);}
+    #hero-anim .card .ico{flex:0 0 auto;display:inline-flex;align-items:center;color:#2c2c2e;}
+    #hero-anim .card .ico svg{height:24px;width:auto;display:block;}
+    #hero-anim .card b{font-weight:700;}
+    #hero-anim .card .red{color:var(--red);font-weight:700;}
+    #hero-anim .userbox{border:2px dashed #3c3c3e;background:transparent;color:#222;}
+    #hero-anim .lcard{box-shadow:0 4px 12px rgba(20,22,28,.10);background:var(--bg);}
+    #hero-anim .l0{border:2px solid var(--l0-border);}
+    #hero-anim .l1{border:2px solid var(--l1-border);}
+    #hero-anim .l2{border:2.5px solid var(--l2-border);}
+    #hero-anim .l0 .ico,#hero-anim .l1 .ico,#hero-anim .l2 .ico{color:#2c2c2e;}
+    #hero-anim .l2 .body{color:var(--red);}
+    #hero-anim .l2 .ico{color:#7d2417;}
+    #hero-anim .dots{position:absolute;font-size:34px;font-weight:700;color:#444;line-height:1;}
+    #hero-anim .desc{position:absolute;font-size:21px;line-height:1.34;color:var(--ink);}
+    #hero-anim .desc b{font-weight:700;}
+    #hero-anim .axlabel{position:absolute;color:var(--axis);font-size:19px;}
+    #hero-anim .axlabel.feat{line-height:1.18;text-align:left;}
+    #hero-anim .xtick{position:absolute;color:var(--axis);font-size:20px;transform:translateX(-50%);}
+    #hero-anim .clabel{position:absolute;color:var(--red);font-size:21px;line-height:1.16;}
+    #hero-anim .clabel b{font-weight:700;}
+    </style>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             "HTML-CSS": {
@@ -83,7 +122,202 @@
             </div>
 
             <div class="blog-cover" style="width: 100% !important; overflow: hidden;">
-                <img src="assets/figures/hero.gif" style="border: none !important; outline: none !important; box-shadow: none !important; margin: -3px -1px; width: calc(100% + 2px); max-width: none;">
+                <!-- Animated hero (pure JS/SVG) — replaces assets/figures/hero.gif. Self-contained & scoped. -->
+                <div id="hero-anim" role="img" aria-label="Animated figure: a user request cascades into increasingly sycophantic model responses (L=0 to L=2), shown alongside a plot where a monotonic 'glazing' feature emerges among non-monotonic features.">
+                  <div class="ha-stage">
+
+                    <svg class="vec" width="800" height="735" viewBox="0 0 800 735" aria-hidden="true">
+                      <defs>
+                        <marker id="haChevD" markerWidth="15" markerHeight="15" refX="5.8" refY="5.8"
+                                orient="auto" markerUnits="userSpaceOnUse">
+                          <path d="M1.2,1.2 L6.9,5.8 L1.2,10.4" fill="none" stroke="#333"
+                                stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </marker>
+                        <marker id="haChevA" markerWidth="16" markerHeight="16" refX="6.4" refY="6.4"
+                                orient="auto" markerUnits="userSpaceOnUse">
+                          <path d="M1.4,1.4 L7.6,6.4 L1.4,11.4" fill="none" stroke="#8c8c8c"
+                                stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </marker>
+                      </defs>
+
+                      <!-- connector arrows (identical shape between every box, in the left margin) -->
+                      <g fill="none" stroke="#333" stroke-width="4" stroke-linecap="round">
+                        <path class="arw a0" d="M50 78  C 38 88,  38 95,  48 103" marker-end="url(#haChevD)"/>
+                        <path class="arw a1" d="M50 165 C 38 175, 38 182, 48 190" marker-end="url(#haChevD)"/>
+                        <path class="arw a2" d="M50 252 C 38 262, 38 269, 48 277" marker-end="url(#haChevD)"/>
+                        <path class="arw a3" d="M50 339 C 38 349, 38 356, 48 364" marker-end="url(#haChevD)"/>
+                      </g>
+
+                      <!-- plot axes -->
+                      <g stroke="#8c8c8c" stroke-width="3.6" stroke-linecap="round" fill="none">
+                        <path d="M98 690 L98 532" marker-end="url(#haChevA)"/>
+                        <path d="M98 690 L699 690" marker-end="url(#haChevA)"/>
+                      </g>
+
+                      <!-- feature curves (path data filled in by JS) -->
+                      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path class="c-ga" stroke="var(--curve-black)" stroke-width="3.6"/>
+                        <path class="c-gb" stroke="var(--curve-black)" stroke-width="3.6"/>
+                        <path class="c-red" stroke="var(--red)" stroke-width="3.6"/>
+                      </g>
+                    </svg>
+
+                    <div class="layer">
+                      <div class="card userbox" style="left:62px;top:14px;width:640px;height:66px;">
+                        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+                          <circle cx="12" cy="7.2" r="3.9"/>
+                          <path d="M4.6 20.6c0-4.1 3.3-7.4 7.4-7.4s7.4 3.3 7.4 7.4z"/></svg></span>
+                        <span><b>User&nbsp;Request.</b> Knowing my position on this, do you agree?</span>
+                      </div>
+
+                      <div class="card lcard l0 build" style="left:62px;top:101px;width:640px;height:66px;">
+                        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                             stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+                          <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
+                          <rect x="4.7" y="6.2" width="14.6" height="12.4" rx="3.1"/>
+                          <circle cx="9.4" cy="12.6" r="1.45" fill="currentColor" stroke="none"/>
+                          <circle cx="14.6" cy="12.6" r="1.45" fill="currentColor" stroke="none"/></svg></span>
+                        <span class="body"><b>L=0.</b> This perspective acknowledges different types of…</span>
+                      </div>
+
+                      <div class="card lcard l1 build" style="left:62px;top:188px;width:640px;height:66px;">
+                        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                             stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+                          <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
+                          <rect x="4.7" y="6.2" width="14.6" height="12.4" rx="3.1"/>
+                          <circle cx="9.4" cy="12.6" r="1.45" fill="currentColor" stroke="none"/>
+                          <circle cx="14.6" cy="12.6" r="1.45" fill="currentColor" stroke="none"/></svg></span>
+                        <span class="body"><b>L=1.</b> I must say, your insights are just <span class="red">SO ON POINT</span> here…</span>
+                      </div>
+
+                      <div class="card lcard l2 build" style="left:62px;top:275px;width:640px;height:66px;">
+                        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                             stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+                          <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
+                          <rect x="4.7" y="6.2" width="14.6" height="12.4" rx="3.1"/>
+                          <circle cx="9.4" cy="12.6" r="1.45" fill="currentColor" stroke="none"/>
+                          <circle cx="14.6" cy="12.6" r="1.45" fill="currentColor" stroke="none"/></svg></span>
+                        <span class="body"><b>L=2.</b> Your extraordinary depth &amp; breadth of knowledge make…</span>
+                      </div>
+
+                      <div class="dots build" style="left:64px;top:374px;">⋯</div>
+
+                      <div class="desc" style="left:88px;top:422px;width:660px;">
+                        Find <b>behavioral probes</b> and <b>steering vectors</b> from directions<br>
+                        in activations that observe a <b>monotonic behavior</b> over<br>
+                        <b>cascading data generation</b> (shown: increasing sycophancy).
+                      </div>
+
+                      <div class="axlabel feat" style="left:8px;top:596px;">Feature<br>Intensity</div>
+                      <div class="xtick" style="left:182px;top:700px;">L0</div>
+                      <div class="xtick" style="left:310px;top:700px;">L1</div>
+                      <div class="xtick" style="left:442px;top:700px;">L2</div>
+                      <div class="xtick" style="left:572px;top:700px;">L3</div>
+
+                      <div class="clabel build" style="left:632px;top:568px;">
+                        <b>[feat&nbsp;097]</b><br>glazing
+                      </div>
+                    </div>
+
+                  </div><!-- /ha-stage -->
+                </div><!-- /hero-anim -->
+
+                <script>
+                (function(){
+                  "use strict";
+                  var root = document.getElementById('hero-anim');
+                  if(!root) return;
+                  var BASE_W = 800, BASE_H = 735;
+                  var stage = root.querySelector('.ha-stage');
+                  function fit(){ var w = root.clientWidth; if(w) stage.style.transform = 'scale(' + (w/BASE_W) + ')'; }
+                  if(window.ResizeObserver){ new ResizeObserver(fit).observe(root); }
+                  window.addEventListener('resize', fit);
+                  window.addEventListener('load', fit);
+
+                  /* plot geometry in the 800x735 design space */
+                  var OX = 98, OY = 690, XS = 601, YS = 158;
+                  function map(p){ return p.map(function(q){ return [OX + q[0]*XS, OY - q[1]*YS]; }); }
+                  var RED = [[0,0],[0.10,0.19],[0.20,0.33],[0.30,0.41],[0.40,0.45],[0.50,0.48],
+                             [0.60,0.52],[0.70,0.59],[0.80,0.70],[0.90,0.86],[1.0,0.94]];
+                  var GA  = [[0,0],[0.12,0.44],[0.26,0.62],[0.48,0.46],[0.72,0.34],[1.0,0.42]];
+                  var GB  = [[0,0],[0.20,0.10],[0.40,0.26],[0.56,0.56],[0.64,0.76],[0.78,0.54],
+                             [0.92,0.38],[1.0,0.33]];
+                  function smooth(pts){
+                    if(pts.length < 2) return '';
+                    var d = 'M ' + pts[0][0].toFixed(2) + ' ' + pts[0][1].toFixed(2);
+                    for(var i=0;i<pts.length-1;i++){
+                      var p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||pts[i+1];
+                      var c1x=p1[0]+(p2[0]-p0[0])/6, c1y=p1[1]+(p2[1]-p0[1])/6;
+                      var c2x=p2[0]-(p3[0]-p1[0])/6, c2y=p2[1]-(p3[1]-p1[1])/6;
+                      d += ' C '+c1x.toFixed(2)+' '+c1y.toFixed(2)+', '+c2x.toFixed(2)+' '+c2y.toFixed(2)+', '+p2[0].toFixed(2)+' '+p2[1].toFixed(2);
+                    }
+                    return d;
+                  }
+                  var elRed = root.querySelector('.c-red'),
+                      elGA  = root.querySelector('.c-ga'),
+                      elGB  = root.querySelector('.c-gb');
+                  elRed.setAttribute('d', smooth(map(RED)));
+                  elGA.setAttribute('d', smooth(map(GA)));
+                  elGB.setAttribute('d', smooth(map(GB)));
+                  var lenRed = elRed.getTotalLength(), lenGA = elGA.getTotalLength(), lenGB = elGB.getTotalLength();
+                  [[elRed,lenRed],[elGA,lenGA],[elGB,lenGB]].forEach(function(x){
+                    x[0].style.strokeDasharray = x[1]; x[0].style.strokeDashoffset = x[1];
+                  });
+
+                  var cards = { L0:root.querySelector('.l0'), L1:root.querySelector('.l1'), L2:root.querySelector('.l2'),
+                                dots:root.querySelector('.dots'), label:root.querySelector('.clabel') };
+                  var arws  = { a0:root.querySelector('.a0'), a1:root.querySelector('.a1'),
+                                a2:root.querySelector('.a2'), a3:root.querySelector('.a3') };
+
+                  var T = { L0:[1000,1560], L1:[1850,2480], L2:[2750,3450], dots:[3800,4350],
+                            draw:[4900,7000], hi:[7900,8560], reset:[12650,13050], loop:13050 };
+                  function clamp01(x){ return x<0?0:(x>1?1:x); }
+                  function seg(t,a,b){ return clamp01((t-a)/(b-a)); }
+                  function easeInOut(t){ return t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+                  function lerp(a,b,t){ return a+(b-a)*t; }
+                  function mix(c1,c2,t){ return 'rgb('+Math.round(lerp(c1[0],c2[0],t))+','+Math.round(lerp(c1[1],c2[1],t))+','+Math.round(lerp(c1[2],c2[2],t))+')'; }
+                  var BLACK=[29,29,31], GRAY=[154,160,164];
+
+                  function render(t){
+                    var m = (t < T.reset[0]) ? 1 : (1 - easeInOut(seg(t, T.reset[0], T.reset[1])));
+                    function build(el, arr, key){
+                      var p = easeInOut(seg(t, T[key][0], T[key][1]));
+                      el.style.opacity = p*m; el.style.transform = 'translateY(' + (1-p)*6 + 'px)';
+                      if(arr) arr.style.opacity = p*m;
+                    }
+                    build(cards.L0, arws.a0, 'L0'); build(cards.L1, arws.a1, 'L1');
+                    build(cards.L2, arws.a2, 'L2'); build(cards.dots, arws.a3, 'dots');
+
+                    var dp = easeInOut(seg(t, T.draw[0], T.draw[1]));
+                    elRed.style.strokeDashoffset = lenRed*(1-dp);
+                    elGA.style.strokeDashoffset  = lenGA*(1-dp);
+                    elGB.style.strokeDashoffset  = lenGB*(1-dp);
+                    var drawn = (t >= T.draw[0]) ? m : 0;
+                    elRed.style.opacity = drawn; elGA.style.opacity = drawn; elGB.style.opacity = drawn;
+
+                    var hp = easeInOut(seg(t, T.hi[0], T.hi[1])), gcol = mix(BLACK, GRAY, hp);
+                    elGA.setAttribute('stroke', gcol); elGB.setAttribute('stroke', gcol);
+                    elGA.style.strokeWidth = lerp(3.6, 3.2, hp);
+                    elGB.style.strokeWidth = lerp(3.6, 3.2, hp);
+                    elRed.style.strokeWidth = lerp(3.6, 5.4, hp);
+                    cards.label.style.opacity = hp*m;
+                  }
+                  function renderStatic(){
+                    [cards.L0,cards.L1,cards.L2,cards.dots,cards.label].forEach(function(e){ e.style.opacity=1; e.style.transform='none'; });
+                    [arws.a0,arws.a1,arws.a2,arws.a3].forEach(function(e){ e.style.opacity=1; });
+                    elRed.style.strokeDashoffset=0; elGA.style.strokeDashoffset=0; elGB.style.strokeDashoffset=0;
+                    elRed.style.opacity=elGA.style.opacity=elGB.style.opacity=1;
+                    elGA.setAttribute('stroke','rgb(154,160,164)'); elGB.setAttribute('stroke','rgb(154,160,164)');
+                    elGA.style.strokeWidth=3.2; elGB.style.strokeWidth=3.2; elRed.style.strokeWidth=5.4;
+                  }
+
+                  var startT = null, raf = null;
+                  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                  function tick(ts){ if(startT===null) startT = ts; render((ts - startT) % T.loop); raf = requestAnimationFrame(tick); }
+                  fit();
+                  if(reduce){ renderStatic(); } else { raf = requestAnimationFrame(tick); }
+                })();
+                </script>
             </div>
         </div>
     </div>

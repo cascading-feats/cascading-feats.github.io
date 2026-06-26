@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero animation — JS recreation</title>
+<style>
+  :root{
+    --bg:        rgb(224,227,230);
+    --ink:       #1c1c1e;
+    --red:       #b81f12;          /* strong red: curve, label, "SO ON POINT" */
+    --axis:      #8c8c8c;
+    --l0-border: #4a4a4a;
+    --l1-border: #d3795f;
+    --l2-border: #bc3c25;
+    --l2-fill:   #e7c4c0;
+    --curve-black:#1d1d1f;
+    --curve-gray:#9aa0a4;
+    --font: "HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:#f4f5f6; color:var(--ink);
+    font-family:var(--font);
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:980px;margin:0 auto;padding:28px 20px 80px;}
+  .page h1{font-size:21px;font-weight:700;margin:0 0 4px;}
+  .page p.sub{margin:0 0 22px;color:#666;font-size:14px;line-height:1.5;}
+  .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:18px 0 14px;}
+  .controls button{
+    font-family:var(--font);font-size:13px;border:1px solid #cfd2d5;background:#fff;
+    padding:7px 13px;border-radius:7px;cursor:pointer;color:#222;
+    box-shadow:0 1px 2px rgba(0,0,0,.05);
+  }
+  .controls button:hover{background:#f0f1f2;}
+  .controls .hint{font-size:12.5px;color:#888;}
+
+  /* ---- the animation host: mirrors the GIF aspect (800 x 735) ---- */
+  .hero-outer{position:relative;width:100%;overflow:hidden;background:var(--bg);
+              border-radius:10px;box-shadow:0 2px 14px rgba(0,0,0,.10);}
+  .hero-stage{position:absolute;top:0;left:0;width:800px;height:735px;
+              transform-origin:top left;}
+  .hero-stage svg.vec{position:absolute;top:0;left:0;}
+  .layer{position:absolute;top:0;left:0;width:800px;height:735px;}
+
+  /* cards */
+  .card{position:absolute;display:flex;align-items:center;gap:12px;
+        padding:0 18px;border-radius:13px;font-size:19.5px;line-height:1.25;
+        letter-spacing:.1px;white-space:nowrap;overflow:hidden;}
+  .card .ico{flex:0 0 auto;display:inline-flex;align-items:center;color:#2c2c2e;}
+  .card .ico svg{height:24px;width:auto;display:block;}
+  .card b{font-weight:700;}
+  .card .red{color:var(--red);font-weight:700;}
+
+  .userbox{border:2px dashed #3c3c3e;background:transparent;color:#222;}
+  .userbox .ico{color:#2a2a2a;font-size:18px;}
+
+  .lcard{box-shadow:0 4px 12px rgba(20,22,28,.10);background:var(--bg);}
+  .l0{border:2px solid var(--l0-border);}
+  .l1{border:2px solid var(--l1-border);}
+  .l2{border:2.5px solid var(--l2-border);}
+  .l0 .ico,.l1 .ico,.l2 .ico{color:#2c2c2e;}
+  .l2 .body{color:var(--red);}
+  .l2 .ico{color:#7d2417;}
+
+  .dots{position:absolute;font-size:34px;font-weight:700;color:#444;line-height:1;}
+
+  /* description */
+  .desc{position:absolute;font-size:21px;line-height:1.34;color:var(--ink);}
+  .desc b{font-weight:700;}
+
+  /* axis text */
+  .axlabel{position:absolute;color:var(--axis);font-size:19px;}
+  .axlabel.feat{line-height:1.18;text-align:left;}
+  .xtick{position:absolute;color:var(--axis);font-size:20px;transform:translateX(-50%);}
+
+  /* curve label */
+  .clabel{position:absolute;color:var(--red);font-size:21px;line-height:1.16;}
+  .clabel b{font-weight:700;}
+
+  @media (max-width:560px){
+    .page{padding:18px 12px 60px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Hero animation — pure-JS/SVG recreation</h1>
+  <p class="sub">A from-scratch reproduction of <code>assets/figures/hero.gif</code> (no raster frames — all vector + JS).
+     Use the toggle to compare against the original GIF.</p>
+
+  <div class="controls">
+    <button id="replay">↻ Replay</button>
+    <button id="cmp">Compare with original GIF</button>
+    <span class="hint">~13&nbsp;s loop, matches the GIF timing.</span>
+  </div>
+
+  <!-- comparison area: JS animation (+ optional GIF) -->
+  <div id="grid" style="display:block;">
+    <div class="hero-outer" id="outerJS">
+      <div class="hero-stage" id="stage">
+
+        <!-- vector layer: axes, connector arrows, curves -->
+        <svg class="vec" width="800" height="735" viewBox="0 0 800 735">
+          <defs>
+            <!-- open "two-tick" chevron heads (not filled triangles) -->
+            <marker id="chevD" markerWidth="15" markerHeight="15" refX="5.8" refY="5.8"
+                    orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M1.2,1.2 L6.9,5.8 L1.2,10.4" fill="none" stroke="#333"
+                    stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <marker id="chevA" markerWidth="16" markerHeight="16" refX="6.4" refY="6.4"
+                    orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M1.4,1.4 L7.6,6.4 L1.4,11.4" fill="none" stroke="var(--axis)"
+                    stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <!-- connector arrows: identical shape between every box, in the left margin -->
+          <g id="arrows" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round">
+            <path class="arw a0" d="M50 78  C 38 88,  38 95,  48 103" marker-end="url(#chevD)"/>
+            <path class="arw a1" d="M50 165 C 38 175, 38 182, 48 190" marker-end="url(#chevD)"/>
+            <path class="arw a2" d="M50 252 C 38 262, 38 269, 48 277" marker-end="url(#chevD)"/>
+            <path class="arw a3" d="M50 339 C 38 349, 38 356, 48 364" marker-end="url(#chevD)"/>
+          </g>
+
+          <!-- plot axes -->
+          <g stroke="var(--axis)" stroke-width="3.6" stroke-linecap="round" fill="none">
+            <path d="M98 690 L98 532" marker-end="url(#chevA)"/>
+            <path d="M98 690 L699 690" marker-end="url(#chevA)"/>
+          </g>
+
+          <!-- feature curves (paths filled in by JS) -->
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path id="gA" stroke="var(--curve-black)" stroke-width="3.6"/>
+            <path id="gB" stroke="var(--curve-black)" stroke-width="3.6"/>
+            <path id="red" stroke="var(--red)" stroke-width="3.6"/>
+          </g>
+        </svg>
+
+        <!-- text / html layer -->
+        <div class="layer">
+          <!-- user request -->
+          <div class="card userbox" id="userbox"
+               style="left:62px;top:14px;width:640px;height:66px;">
+            <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+              <circle cx="12" cy="7.2" r="3.9"/>
+              <path d="M4.6 20.6c0-4.1 3.3-7.4 7.4-7.4s7.4 3.3 7.4 7.4z"/></svg></span>
+            <span><b>User&nbsp;Request.</b> Knowing my position on this, do you agree?</span>
+          </div>
+
+          <!-- L0 -->
+          <div class="card lcard l0 build" id="cL0"
+               style="left:62px;top:101px;width:640px;height:66px;">
+            <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                 stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+              <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
+              <rect x="4.7" y="6.2" width="14.6" height="12.4" rx="3.1"/>
+              <circle cx="9.4" cy="12.6" r="1.45" fill="currentColor" stroke="none"/>
+              <circle cx="14.6" cy="12.6" r="1.45" fill="currentColor" stroke="none"/></svg></span>
+            <span class="body"><b>L=0.</b> This perspective acknowledges different types of…</span>
+          </div>
+          <!-- L1 -->
+          <div class="card lcard l1 build" id="cL1"
+               style="left:62px;top:188px;width:640px;height:66px;">
+            <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                 stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+              <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
+              <rect x="4.7" y="6.2" width="14.6" height="12.4" rx="3.1"/>
+              <circle cx="9.4" cy="12.6" r="1.45" fill="currentColor" stroke="none"/>
+              <circle cx="14.6" cy="12.6" r="1.45" fill="currentColor" stroke="none"/></svg></span>
+            <span class="body"><b>L=1.</b> I must say, your insights are just <span class="red">SO ON POINT</span> here…</span>
+          </div>
+          <!-- L2 -->
+          <div class="card lcard l2 build" id="cL2"
+               style="left:62px;top:275px;width:640px;height:66px;">
+            <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                 stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+              <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
+              <rect x="4.7" y="6.2" width="14.6" height="12.4" rx="3.1"/>
+              <circle cx="9.4" cy="12.6" r="1.45" fill="currentColor" stroke="none"/>
+              <circle cx="14.6" cy="12.6" r="1.45" fill="currentColor" stroke="none"/></svg></span>
+            <span class="body"><b>L=2.</b> Your extraordinary depth &amp; breadth of knowledge make…</span>
+          </div>
+
+          <!-- continuation dots -->
+          <div class="dots build" id="dots" style="left:64px;top:374px;">⋯</div>
+
+          <!-- description (explicit line breaks mirror the GIF; the stage scales
+               as one unit so text never reflows across screen sizes) -->
+          <div class="desc" style="left:88px;top:422px;width:660px;">
+            Find <b>behavioral probes</b> and <b>steering vectors</b> from directions<br>
+            in activations that observe a <b>monotonic behavior</b> over<br>
+            <b>cascading data generation</b> (shown: increasing sycophancy).
+          </div>
+
+          <!-- y axis label -->
+          <div class="axlabel feat" style="left:8px;top:596px;">Feature<br>Intensity</div>
+          <!-- x ticks -->
+          <div class="xtick" style="left:182px;top:700px;">L0</div>
+          <div class="xtick" style="left:310px;top:700px;">L1</div>
+          <div class="xtick" style="left:442px;top:700px;">L2</div>
+          <div class="xtick" style="left:572px;top:700px;">L3</div>
+
+          <!-- highlighted curve label -->
+          <div class="clabel build" id="clabel" style="left:632px;top:568px;">
+            <b>[feat&nbsp;097]</b><br>glazing
+          </div>
+        </div>
+
+      </div><!-- /stage -->
+    </div><!-- /outerJS -->
+
+    <!-- GIF (hidden until "compare") -->
+    <div id="gifWrap" style="display:none;margin-top:16px;">
+      <div style="font-size:12.5px;color:#888;margin:0 0 6px;">Original GIF</div>
+      <img src="assets/figures/hero.gif" style="width:100%;display:block;border-radius:10px;
+           box-shadow:0 2px 14px rgba(0,0,0,.10);">
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- responsive scaling of the fixed 800x735 stage ---------- */
+  var BASE_W = 800, BASE_H = 735;
+  var outer = document.getElementById('outerJS');
+  var stage = document.getElementById('stage');
+  function fit(){
+    var s = outer.clientWidth / BASE_W;
+    stage.style.transform = 'scale(' + s + ')';
+    outer.style.height = (BASE_H * s) + 'px';
+  }
+  if (window.ResizeObserver){ new ResizeObserver(fit).observe(outer); }
+  window.addEventListener('resize', fit);
+
+  /* ---------- plot geometry (screen px in the 800x735 space) ---------- */
+  var OX = 98, OY = 690, XS = 601, YS = 158;   // origin, x-extent, y-extent
+  function map(pts){ return pts.map(function(p){ return [OX + p[0]*XS, OY - p[1]*YS]; }); }
+
+  // control points: [x-fraction 0..1 , height-fraction 0..1]
+  var RED = [[0,0],[0.10,0.19],[0.20,0.33],[0.30,0.41],[0.40,0.45],[0.50,0.48],
+             [0.60,0.52],[0.70,0.59],[0.80,0.70],[0.90,0.86],[1.0,0.94]];
+  // gray curves: fewer, well-spaced control points -> clean single humps, no wobble
+  var GA  = [[0,0],[0.12,0.44],[0.26,0.62],[0.48,0.46],[0.72,0.34],[1.0,0.42]];
+  var GB  = [[0,0],[0.20,0.10],[0.40,0.26],[0.56,0.56],[0.64,0.76],[0.78,0.54],
+             [0.92,0.38],[1.0,0.33]];
+
+  // Catmull-Rom -> cubic Bezier, for smooth organic curves
+  function smooth(pts){
+    if(pts.length < 2) return '';
+    var d = 'M ' + pts[0][0].toFixed(2) + ' ' + pts[0][1].toFixed(2);
+    for(var i=0;i<pts.length-1;i++){
+      var p0 = pts[i-1]||pts[i], p1 = pts[i], p2 = pts[i+1], p3 = pts[i+2]||pts[i+1];
+      var c1x = p1[0] + (p2[0]-p0[0])/6, c1y = p1[1] + (p2[1]-p0[1])/6;
+      var c2x = p2[0] - (p3[0]-p1[0])/6, c2y = p2[1] - (p3[1]-p1[1])/6;
+      d += ' C ' + c1x.toFixed(2) + ' ' + c1y.toFixed(2) + ', '
+                 + c2x.toFixed(2) + ' ' + c2y.toFixed(2) + ', '
+                 + p2[0].toFixed(2) + ' ' + p2[1].toFixed(2);
+    }
+    return d;
+  }
+
+  var elRed = document.getElementById('red');
+  var elGA  = document.getElementById('gA');
+  var elGB  = document.getElementById('gB');
+  elRed.setAttribute('d', smooth(map(RED)));
+  elGA .setAttribute('d', smooth(map(GA)));
+  elGB .setAttribute('d', smooth(map(GB)));
+
+  var lenRed = elRed.getTotalLength();
+  var lenGA  = elGA.getTotalLength();
+  var lenGB  = elGB.getTotalLength();
+  [ [elRed,lenRed], [elGA,lenGA], [elGB,lenGB] ].forEach(function(x){
+    x[0].style.strokeDasharray = x[1];
+    x[0].style.strokeDashoffset = x[1];
+  });
+
+  /* ---------- elements that "build in" ---------- */
+  var cards = {
+    L0: document.getElementById('cL0'),
+    L1: document.getElementById('cL1'),
+    L2: document.getElementById('cL2'),
+    dots: document.getElementById('dots'),
+    label: document.getElementById('clabel')
+  };
+  var arws = {
+    a0: document.querySelector('.a0'),
+    a1: document.querySelector('.a1'),
+    a2: document.querySelector('.a2'),
+    a3: document.querySelector('.a3')
+  };
+
+  /* ---------- timeline (ms) — tuned to the GIF ---------- */
+  var T = {
+    L0:[1000,1560], L1:[1850,2480], L2:[2750,3450], dots:[3800,4350],
+    draw:[4900,7000], hold:7900, hi:[7900,8560],
+    holdEnd:12650, reset:[12650,13050], loop:13050
+  };
+
+  function clamp01(x){ return x<0?0:(x>1?1:x); }
+  function seg(t,a,b){ return clamp01((t-a)/(b-a)); }
+  function easeInOut(t){ return t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function mix(c1,c2,t){            // c1,c2 = [r,g,b]
+    return 'rgb('+Math.round(lerp(c1[0],c2[0],t))+','
+                 +Math.round(lerp(c1[1],c2[1],t))+','
+                 +Math.round(lerp(c1[2],c2[2],t))+')';
+  }
+  var BLACK=[29,29,31], GRAY=[154,160,164];
+
+  function setFade(el, v){ el.style.opacity = v; }
+
+  /* apply the full visual state for a given time-in-loop (ms) */
+  function render(t){
+    // global reset multiplier (gentle fade-out before looping)
+    var m = (t < T.reset[0]) ? 1 : (1 - easeInOut(seg(t, T.reset[0], T.reset[1])));
+
+    // card + arrow fade-ins (with a hair of upward drift for life)
+    function build(el, arr, key){
+      var p = easeInOut(seg(t, T[key][0], T[key][1]));
+      setFade(el, p*m);
+      el.style.transform = 'translateY(' + (1-p)*6 + 'px)';
+      if(arr) setFade(arr, p*m);
+    }
+    build(cards.L0, arws.a0, 'L0');   // a0 = userbox -> L0
+    build(cards.L1, arws.a1, 'L1');
+    build(cards.L2, arws.a2, 'L2');
+    build(cards.dots, arws.a3, 'dots');
+
+    // curve draw (all three sweep left->right together)
+    var dp = easeInOut(seg(t, T.draw[0], T.draw[1]));
+    elRed.style.strokeDashoffset = lenRed*(1-dp);
+    elGA .style.strokeDashoffset = lenGA *(1-dp);
+    elGB .style.strokeDashoffset = lenGB *(1-dp);
+    var drawn = (t >= T.draw[0]) ? m : 0;
+    elRed.style.opacity = drawn; elGA.style.opacity = drawn; elGB.style.opacity = drawn;
+
+    // highlight transition: blacks -> gray, red bolds, label appears
+    var hp = easeInOut(seg(t, T.hi[0], T.hi[1]));
+    var gcol = mix(BLACK, GRAY, hp);
+    elGA.setAttribute('stroke', gcol);
+    elGB.setAttribute('stroke', gcol);
+    elGA.style.strokeWidth = lerp(3.6, 3.2, hp);
+    elGB.style.strokeWidth = lerp(3.6, 3.2, hp);
+    elRed.style.strokeWidth = lerp(3.6, 5.4, hp);
+    setFade(cards.label, hp*m);
+  }
+
+  /* show the fully-resolved final frame (for reduced-motion) */
+  function renderStatic(){
+    [cards.L0,cards.L1,cards.L2,cards.dots,cards.label].forEach(function(e){
+      e.style.opacity=1; e.style.transform='none';
+    });
+    [arws.a0,arws.a1,arws.a2,arws.a3].forEach(function(e){ e.style.opacity=1; });
+    elRed.style.strokeDashoffset=0; elGA.style.strokeDashoffset=0; elGB.style.strokeDashoffset=0;
+    elRed.style.opacity=elGA.style.opacity=elGB.style.opacity=1;
+    elGA.setAttribute('stroke','rgb(154,160,164)'); elGB.setAttribute('stroke','rgb(154,160,164)');
+    elGA.style.strokeWidth=3.2; elGB.style.strokeWidth=3.2; elRed.style.strokeWidth=5.4;
+  }
+
+  /* ---------- run loop ---------- */
+  var start = null, raf = null;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function tick(ts){
+    if(start===null) start = ts;
+    var t = (ts - start) % T.loop;
+    render(t);
+    raf = requestAnimationFrame(tick);
+  }
+  function play(){
+    if(reduce){ renderStatic(); return; }
+    if(raf) cancelAnimationFrame(raf);
+    start = null;
+    raf = requestAnimationFrame(tick);
+  }
+
+  fit();
+  play();
+
+  /* test/debug hook: seek to an exact time-in-loop (ms) without the rAF clock */
+  window.__hero = {
+    seek: function(t){ if(raf) cancelAnimationFrame(raf); raf=null; render(t); },
+    play: play, T: T
+  };
+
+  /* ---------- controls ---------- */
+  document.getElementById('replay').addEventListener('click', play);
+
+  var gifWrap = document.getElementById('gifWrap');
+  document.getElementById('cmp').addEventListener('click', function(){
+    var on = gifWrap.style.display === 'none';
+    gifWrap.style.display = on ? 'block' : 'none';
+    this.textContent = on ? 'Hide original GIF' : 'Compare with original GIF';
+  });
+})();
+</script>
+</body>
+</html>
