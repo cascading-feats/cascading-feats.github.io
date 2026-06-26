@@ -13,7 +13,7 @@
     --l0-border: #4a4a4a;
     --l1-border: #d3795f;
     --l2-border: #bc3c25;
-    --l2-fill:   #dba2a1;
+    --l2-fill:   #e7c4c0;
     --curve-black:#1d1d1f;
     --curve-gray:#9aa0a4;
     --font: "HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -45,11 +45,11 @@
   .layer{position:absolute;top:0;left:0;width:800px;height:735px;}
 
   /* cards */
-  .card{position:absolute;display:flex;align-items:center;gap:11px;
-        padding:0 18px;border-radius:13px;font-size:18px;line-height:1.25;
+  .card{position:absolute;display:flex;align-items:center;gap:12px;
+        padding:0 18px;border-radius:13px;font-size:19.5px;line-height:1.25;
         letter-spacing:.1px;white-space:nowrap;overflow:hidden;}
   .card .ico{flex:0 0 auto;display:inline-flex;align-items:center;color:#2c2c2e;}
-  .card .ico svg{height:20px;width:auto;display:block;}
+  .card .ico svg{height:24px;width:auto;display:block;}
   .card b{font-weight:700;}
   .card .red{color:var(--red);font-weight:700;}
 
@@ -105,28 +105,31 @@
         <!-- vector layer: axes, connector arrows, curves -->
         <svg class="vec" width="800" height="735" viewBox="0 0 800 735">
           <defs>
-            <marker id="ah" markerWidth="9" markerHeight="9" refX="6" refY="4.2"
+            <!-- open "two-tick" chevron heads (not filled triangles) -->
+            <marker id="chevD" markerWidth="14" markerHeight="14" refX="5.6" refY="5.6"
                     orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M0,0 L8,4.2 L0,8.4 L2.4,4.2 Z" fill="#333"/>
+              <path d="M1.2,1.3 L6.6,5.6 L1.2,9.9" fill="none" stroke="#333"
+                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </marker>
-            <marker id="axh" markerWidth="11" markerHeight="11" refX="7" refY="5"
+            <marker id="chevA" markerWidth="16" markerHeight="16" refX="6.4" refY="6.4"
                     orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M0,0 L10,5 L0,10 L3,5 Z" fill="var(--axis)"/>
+              <path d="M1.4,1.5 L7.6,6.4 L1.4,11.3" fill="none" stroke="var(--axis)"
+                    stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
             </marker>
           </defs>
 
-          <!-- connector arrows (between cards) -->
-          <g id="arrows" fill="none" stroke="#333" stroke-width="2.4" stroke-linecap="round">
-            <path class="arw a0" d="M86 62 C 60 74, 60 88, 86 97"  marker-end="url(#ah)"/>
-            <path class="arw a1" d="M74 168 C 54 174, 54 180, 72 186" marker-end="url(#ah)"/>
-            <path class="arw a2" d="M74 256 C 54 262, 54 268, 72 274" marker-end="url(#ah)"/>
-            <path class="arw a3" d="M74 344 C 54 350, 54 356, 72 362" marker-end="url(#ah)"/>
+          <!-- connector arrows: identical shape between every box, in the left margin -->
+          <g id="arrows" fill="none" stroke="#333" stroke-width="3.2" stroke-linecap="round">
+            <path class="arw a0" d="M50 78  C 38 88,  38 95,  48 103" marker-end="url(#chevD)"/>
+            <path class="arw a1" d="M50 165 C 38 175, 38 182, 48 190" marker-end="url(#chevD)"/>
+            <path class="arw a2" d="M50 252 C 38 262, 38 269, 48 277" marker-end="url(#chevD)"/>
+            <path class="arw a3" d="M50 339 C 38 349, 38 356, 48 364" marker-end="url(#chevD)"/>
           </g>
 
           <!-- plot axes -->
-          <g stroke="var(--axis)" stroke-width="2.2" stroke-linecap="round" fill="none">
-            <path d="M98 690 L98 532" marker-end="url(#axh)"/>
-            <path d="M98 690 L699 690" marker-end="url(#axh)"/>
+          <g stroke="var(--axis)" stroke-width="2.8" stroke-linecap="round" fill="none">
+            <path d="M98 690 L98 532" marker-end="url(#chevA)"/>
+            <path d="M98 690 L699 690" marker-end="url(#chevA)"/>
           </g>
 
           <!-- feature curves (paths filled in by JS) -->
@@ -141,7 +144,7 @@
         <div class="layer">
           <!-- user request -->
           <div class="card userbox" id="userbox"
-               style="left:84px;top:14px;width:628px;height:46px;">
+               style="left:62px;top:14px;width:640px;height:66px;">
             <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
               <circle cx="12" cy="7.2" r="3.9"/>
               <path d="M4.6 20.6c0-4.1 3.3-7.4 7.4-7.4s7.4 3.3 7.4 7.4z"/></svg></span>
@@ -150,7 +153,7 @@
 
           <!-- L0 -->
           <div class="card lcard l0 build" id="cL0"
-               style="left:62px;top:99px;width:640px;height:66px;">
+               style="left:62px;top:101px;width:640px;height:66px;">
             <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
                  stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
               <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
@@ -161,7 +164,7 @@
           </div>
           <!-- L1 -->
           <div class="card lcard l1 build" id="cL1"
-               style="left:62px;top:186px;width:640px;height:66px;">
+               style="left:62px;top:188px;width:640px;height:66px;">
             <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
                  stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
               <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
@@ -172,7 +175,7 @@
           </div>
           <!-- L2 -->
           <div class="card lcard l2 build" id="cL2"
-               style="left:62px;top:274px;width:640px;height:66px;">
+               style="left:62px;top:275px;width:640px;height:66px;">
             <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
                  stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
               <path d="M12 5.6V3.4"/><circle cx="12" cy="2.4" r="1.15" fill="currentColor" stroke="none"/>
@@ -183,7 +186,7 @@
           </div>
 
           <!-- continuation dots -->
-          <div class="dots build" id="dots" style="left:80px;top:352px;">⋮</div>
+          <div class="dots build" id="dots" style="left:72px;top:356px;">⋮</div>
 
           <!-- description (explicit line breaks mirror the GIF; the stage scales
                as one unit so text never reflows across screen sizes) -->
@@ -202,7 +205,7 @@
           <div class="xtick" style="left:572px;top:700px;">L3</div>
 
           <!-- highlighted curve label -->
-          <div class="clabel build" id="clabel" style="left:586px;top:562px;">
+          <div class="clabel build" id="clabel" style="left:612px;top:586px;">
             <b>[feat&nbsp;097]</b><br>glazing
           </div>
         </div>
@@ -242,10 +245,10 @@
   // control points: [x-fraction 0..1 , height-fraction 0..1]
   var RED = [[0,0],[0.10,0.19],[0.20,0.33],[0.30,0.41],[0.40,0.45],[0.50,0.48],
              [0.60,0.52],[0.70,0.59],[0.80,0.70],[0.90,0.86],[1.0,0.94]];
-  var GA  = [[0,0],[0.07,0.40],[0.15,0.56],[0.22,0.645],[0.30,0.62],[0.40,0.54],
-             [0.50,0.42],[0.62,0.33],[0.74,0.29],[0.86,0.33],[1.0,0.42]];
-  var GB  = [[0,0],[0.15,0.06],[0.30,0.13],[0.42,0.24],[0.52,0.45],[0.60,0.70],
-             [0.65,0.78],[0.72,0.68],[0.82,0.48],[0.92,0.35],[1.0,0.30]];
+  // gray curves: fewer, well-spaced control points -> clean single humps, no wobble
+  var GA  = [[0,0],[0.12,0.44],[0.26,0.62],[0.48,0.46],[0.72,0.34],[1.0,0.42]];
+  var GB  = [[0,0],[0.20,0.10],[0.40,0.26],[0.56,0.56],[0.64,0.76],[0.78,0.54],
+             [0.92,0.38],[1.0,0.33]];
 
   // Catmull-Rom -> cubic Bezier, for smooth organic curves
   function smooth(pts){
