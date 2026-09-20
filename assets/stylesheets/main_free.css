@@ -1,5 +1,47 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=HelveticaNeue:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* Helvetica Neue, self-hosted.
+
+   The upstream Clarity template sourced this family from
+     @import url(".../css2?family=HelveticaNeue:ital,wght@...")
+   but Helvetica Neue is not a Google Fonts family, so that request returns
+   HTTP 400 and every rule below that asks for "HelveticaNeue" silently fell
+   back to the browser default sans (DejaVu on Linux, Arial on Windows).
+   Declaring the faces here binds the family name to the real font. */
+@font-face {
+  font-family: "HelveticaNeue";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/HelveticaNeue/helveticaneue_regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/HelveticaNeue/helveticaneue_medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/HelveticaNeue/helveticaneue_bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/HelveticaNeue/helveticaneue_italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/HelveticaNeue/helveticaneue_bold_italic.woff2") format("woff2");
+}
 @font-face {
   font-family: "Charter";
   font-style: normal;
@@ -138,21 +180,20 @@ svg {
     font-size: 24px;
     line-height: 1.2;
     padding: 1.5vh 0;
-    font-weight: 600;
+    font-weight: 700;
   }
   h1.title {
-    font-weight: 400;
-    letter-spacing: 0px;
+    font-weight: 500;
     font-size: 26px;
   }
   h2 {
     line-height: 1.2;
     padding: 1.5vh 0;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 18px;
   }
   h3 {
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
     padding: 1.5vh 0;
     font-size: 17px;
@@ -170,22 +211,21 @@ svg {
     font-size: 24px;
     line-height: 1.2;
     padding: 2vh 0;
-    font-weight: 600;
+    font-weight: 700;
   }
   h1.title {
     padding: 0 0 1vh;
-    font-weight: 400;
-    letter-spacing: 0px;
+    font-weight: 500;
     font-size: 26px;
   }
   h2 {
     line-height: 1.2;
     padding: 2vh 0;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 18px;
   }
   h3 {
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
     padding: 2vh 0;
     font-size: 17px;
@@ -197,22 +237,28 @@ svg {
     padding-left: 12vw;
   }
   a, p, td, th, tr, code, pre, ol, ul, li, div {
-    font-size: 17px;
+    font-size: 16px;
   }
   h1 {
     font-size: 24px;
     line-height: 1.2;
     padding: 1vh 0;
+    font-weight: 700;
   }
   h1.title {
     padding: 0 0 1vh;
+    font-weight: 500;
     font-size: 26px;
   }
   h2 {
+    line-height: 1.2;
     padding: 1vh 0;
+    font-weight: 700;
     font-size: 18px;
   }
   h3 {
+    font-weight: 700;
+    line-height: 1.2;
     padding: 1vh 0;
     font-size: 17px;
   }
@@ -223,22 +269,28 @@ svg {
     padding-left: 15vw;
   }
   a, p, td, th, tr, code, pre, ol, ul, li, div {
-    font-size: 18px;
+    font-size: 17px;
   }
   h1 {
-    font-size: 26px;
+    font-size: 30px;
     line-height: 1.2;
     padding: 1vh 0;
+    font-weight: 700;
   }
   h1.title {
     padding: 0 0 1vh;
+    font-weight: 500;
     font-size: 30px;
   }
   h2 {
+    line-height: 1.2;
     padding: 1vh 0;
-    font-size: 20px;
+    font-weight: 700;
+    font-size: 24px;
   }
   h3 {
+    font-weight: 700;
+    line-height: 1.2;
     padding: 1vh 0;
     font-size: 18px;
   }
@@ -249,24 +301,30 @@ svg {
     padding-left: 18vw;
   }
   a, p, td, th, tr, code, pre, ol, ul, li, div {
-    font-size: 20px;
+    font-size: 18px;
   }
   h1 {
     font-size: 30px;
     line-height: 1.2;
     padding: 1.75vh 0;
+    font-weight: 700;
   }
   h1.title {
     padding: 0 0 1vh;
+    font-weight: 500;
     font-size: 36px;
   }
   h2 {
+    line-height: 1.2;
     padding: 1.5vh 0;
-    font-size: 22px;
+    font-weight: 700;
+    font-size: 24px;
   }
   h3 {
+    font-weight: 700;
+    line-height: 1.2;
     padding: 1.5vh 0;
-    font-size: 20px;
+    font-size: 18px;
   }
 }
 @media screen and (min-width: 2000px) {
@@ -275,22 +333,28 @@ svg {
     padding-left: 22vw;
   }
   a, p, td, th, tr, code, pre, ol, ul, li, div {
-    font-size: 20px;
+    font-size: 18px;
   }
   h1 {
     font-size: 30px;
     line-height: 1.2;
     padding: 1.75vh 0;
+    font-weight: 700;
   }
   h1.title {
     padding: 0 0 1vh;
+    font-weight: 500;
     font-size: 36px;
   }
   h2 {
+    line-height: 1.2;
     padding: 1.5vh 0;
+    font-weight: 700;
     font-size: 24px;
   }
   h3 {
+    font-weight: 700;
+    line-height: 1.2;
     padding: 1.5vh 0;
     font-size: 18px;
   }
@@ -301,22 +365,28 @@ svg {
     padding-left: 24vw;
   }
   a, p, td, th, tr, code, pre, ol, ul, li, div {
-    font-size: 22px;
+    font-size: 20px;
   }
   h1 {
     font-size: 30px;
     line-height: 1.2;
     padding: 1.75vh 0;
+    font-weight: 700;
   }
   h1.title {
     padding: 0 0 1vh;
+    font-weight: 500;
     font-size: 36px;
   }
   h2 {
+    line-height: 1.2;
     padding: 1.5vh 0;
+    font-weight: 700;
     font-size: 24px;
   }
   h3 {
+    font-weight: 700;
+    line-height: 1.2;
     padding: 1.5vh 0;
     font-size: 20px;
   }
@@ -337,7 +407,6 @@ footer span {
 }
 footer p {
   font-style: italic;
-  font-family: "Charter";
 }
 
 @media screen and (min-width: 992px) {
@@ -391,25 +460,23 @@ div.container.blog#first-content div.blog-title .blog-intro {
   padding: 2vh 0;
 }
 div.container.blog#first-content div.blog-title .blog-intro p.author {
-  padding: 4px 0 10px;
-  font-family: "Charter";
+  padding: 4px 0;
+  font-weight: 500;
   font-style: italic;
-  font-weight: 400;
   line-height: 1.2;
-  font-size: 85%;
 }
 div.container.blog#first-content div.blog-title .blog-intro p.abstract {
   font-family: "Charter";
   font-weight: 400;
   padding: 1vh 0;
-  font-size: 85%;
-  line-height: 1.6;
 }
 div.container.blog#first-content div.blog-title .blog-intro .info p {
+  padding: 10px 0 0 0;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: #353535;
-  font-weight: 500;
-  font-size: 85%;
+  font-weight: 600;
+  font-size: 0.95em;
 }
 div.container.blog#first-content div.blog-title .blog-cover {
   position: relative;
@@ -434,6 +501,9 @@ div.container.blog p.text {
   padding: 1.5vh 0;
   font-family: "Charter", sans-serif;
 }
+div.container.blog p.text:last-child {
+  padding-bottom: 0;
+}
 div.container.blog ul, div.container.blog ol {
   font-family: inherit;
   font-style: inherit;
@@ -445,13 +515,12 @@ div.container.blog ul li p.text, div.container.blog ol li p.text {
 }
 div.container.blog p.caption {
   padding: 1vh 0;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.2;
-  letter-spacing: 0px;
-  font-size: 70%;
+  font-size: 90%;
 }
 div.container.blog p.caption b {
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 div.container.blog p.caption a {
   font-size: inherit;
@@ -878,9 +947,9 @@ button, .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.65em;
-  font-weight: 500;
-  font-family: "HelveticaNeue", sans-serif;
+  font-size: 0.7em;
+  font-weight: 700;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   letter-spacing: 0.075em;
   text-decoration: none;
   text-transform: uppercase;
@@ -906,6 +975,20 @@ button.icon i, .button.icon i {
   padding-left: 0.5em;
   padding-bottom: 1px;
 }
+input[type=submit].project, input[type=reset].project, input[type=button].project,
+button.project, .button.project {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+  height: 0.75em;
+  padding: 0.6em;
+  font-size: 1em;
+  color: #353535;
+}
+input[type=submit].project.white, input[type=reset].project.white, input[type=button].project.white,
+button.project.white, .button.project.white {
+  color: #f4f3ef;
+}
 
 @media screen and (max-width: 992px) {
   input[type=submit], input[type=reset], input[type=button],
@@ -917,15 +1000,58 @@ button.icon i, .button.icon i {
     font-size: 1.2em;
   }
 }
+/* ======================== Slide Menu ===================== */
+.slide-menu {
+  display: table;
+  margin: 0 auto;
+  padding-bottom: 2vh;
+}
+.slide-menu .dots {
+  margin-bottom: -10px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.slide-menu .dots .dot {
+  position: relative;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  display: inline-block;
+  background-color: #c6c6c6;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 15px;
+  transition: all 0.2s ease-in-out;
+}
+.slide-menu .dots .dot:after {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: -15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.slide-menu .dots .dot:hover {
+  transform: scale(1.4);
+}
+.slide-menu .dots .dot.active {
+  background-color: #E2a3a3;
+  transform: scale(1.4);
+}
+
 /* ======================== Table ===================== */
 .table-wrapper {
   overflow: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
   padding-bottom: 1vh;
 }
 
-.table-wrapper::-webkit-scrollbar {
+.table-wrapper::-webkit-scrollbar { /* WebKit */
   width: 0;
   height: 0;
 }
@@ -933,7 +1059,7 @@ button.icon i, .button.icon i {
 table {
   margin: 0.5vh 0;
   width: 100%;
-  font-family: "HelveticaNeue", sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 table a {
   font-size: inherit;
@@ -945,7 +1071,7 @@ table th b, table td b {
   font-weight: 700;
 }
 table thead {
-  font-weight: 500;
+  font-weight: 700;
 }
 table tbody tr {
   border: solid 1px #404041;
@@ -960,6 +1086,12 @@ table tbody tr:first-child {
 }
 table tbody tr:last-child {
   border-bottom: solid 2px white;
+}
+table tbody tr td.gray {
+  background-color: #ececec !important;
+}
+table tbody tr td.nogray {
+  background-color: #f6f6f6 !important;
 }
 table tbody.center td {
   text-align: center;
@@ -978,6 +1110,26 @@ table th {
 }
 table tfoot {
   border-top: solid 2px white;
+}
+table.alt {
+  border-collapse: separate;
+}
+table.alt tbody tr td {
+  border: solid 1px white;
+  border-left-width: 0;
+  border-top-width: 0;
+}
+table.alt tbody tr td:first-child {
+  border-left-width: 1px;
+}
+table.alt tbody tr:first-child td {
+  border-top-width: 1px;
+}
+table.alt thead {
+  border-bottom: 0;
+}
+table.alt tfoot {
+  border-top: 0;
 }
 
 /* ======================== Code ===================== */
@@ -1003,7 +1155,432 @@ pre code {
   overflow-x: auto;
 }
 
-/* ======================== Key Takeaways Box ===================== */
+/* ======================== Selection ===================== */
+select {
+  border-color: transparent;
+  border-radius: 5px;
+  padding: 5px 3px;
+  background-color: #ececec;
+  display: inline;
+  line-height: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  color: inherit;
+  border: 0;
+  outline: none;
+  margin: inherit;
+  height: 30px;
+  text-underline-offset: 1px;
+  width: inherit;
+}
+select option {
+  white-space: nowrap;
+  overflow: hidden;
+}
+select:hover {
+  cursor: pointer;
+}
+select:after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 3px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #333;
+}
+
+/* ======================== Slider Display ===================== */
+.slider-container {
+  box-shadow: none;
+  outline: none;
+  --divider-width: 1px;
+  --divider-color: #000;
+  --default-handle-width: clamp(10px, 5vw, 40px);
+  --default-handle-color: #000;
+}
+.slider-container.white {
+  --divider-color: #fff;
+  --default-handle-color: #fff;
+}
+.slider-container img {
+  padding: 0 !important;
+}
+
+.before, .after {
+  margin: 0;
+}
+
+.before figcaption {
+  left: 8px;
+}
+
+.after figcaption {
+  right: 8px;
+}
+
+.before figcaption,
+.after figcaption {
+  font-size: 90%;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: transparent;
+  color: #353535;
+  padding: 8px;
+  position: absolute;
+  top: 99%;
+  transform: translateY(-100%);
+  line-height: 100%;
+}
+.before figcaption.white,
+.after figcaption.white {
+  color: #f4f3ef;
+}
+
+/* ======================== Video Control ===================== */
+.video-control {
+  display: flex;
+  justify-content: center;
+  padding: 5px 0;
+  gap: 10px;
+}
+
+.video-speed {
+  opacity: 0;
+}
+.video-speed.fade-in-out {
+  animation: fadeInOut 1.4s linear forwards;
+}
+
+.video-caption {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+/* ======================== Slide Show Control ===================== */
+.slideshow .navigation {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  gap: 10px;
+}
+
+.slideshow .slider {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  padding-bottom: 20px;
+  overflow: hidden;
+}
+.slideshow .slider:hover {
+  cursor: pointer;
+}
+.slideshow .slider .slider-item {
+  width: 400px;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  padding-left: 40px;
+}
+.slideshow .slider .slider-item video {
+  display: block;
+  padding-bottom: 40px;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, code, pre, ol, ul, li {
+  line-height: 1.5;
+}
+
+@media screen and (max-width: 769px) {
+  a, p, td, th, tr, code, pre, ol, ul, li, div {
+    font-size: 15px;
+  }
+  h1 {
+    font-size: 24px;
+    line-height: 1.2;
+    padding: 1.5vh 0;
+    font-weight: 600;
+  }
+  h1.title {
+    font-weight: 400;
+    letter-spacing: 0px;
+    font-size: 26px;
+  }
+  h2 {
+    line-height: 1.2;
+    padding: 1.5vh 0;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  h3 {
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 1.5vh 0;
+    font-size: 17px;
+  }
+}
+@media screen and (min-width: 769px) {
+  .container {
+    padding-right: calc(8.5vw - (100vw - 100%));
+    padding-left: 8.5vw;
+  }
+  a, p, td, th, tr, code, pre, ol, ul, li, div {
+    font-size: 16px;
+  }
+  h1 {
+    font-size: 24px;
+    line-height: 1.2;
+    padding: 2vh 0;
+    font-weight: 600;
+  }
+  h1.title {
+    padding: 0 0 1vh;
+    font-weight: 400;
+    letter-spacing: 0px;
+    font-size: 26px;
+  }
+  h2 {
+    line-height: 1.2;
+    padding: 2vh 0;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  h3 {
+    font-weight: 600;
+    line-height: 1.2;
+    padding: 2vh 0;
+    font-size: 17px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .container {
+    padding-right: calc(12vw - (100vw - 100%));
+    padding-left: 12vw;
+  }
+  a, p, td, th, tr, code, pre, ol, ul, li, div {
+    font-size: 17px;
+  }
+  h1 {
+    font-size: 24px;
+    line-height: 1.2;
+    padding: 1vh 0;
+  }
+  h1.title {
+    padding: 0 0 1vh;
+    font-size: 26px;
+  }
+  h2 {
+    padding: 1vh 0;
+    font-size: 18px;
+  }
+  h3 {
+    padding: 1vh 0;
+    font-size: 17px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .container {
+    padding-right: calc(15vw - (100vw - 100%));
+    padding-left: 15vw;
+  }
+  a, p, td, th, tr, code, pre, ol, ul, li, div {
+    font-size: 18px;
+  }
+  h1 {
+    font-size: 26px;
+    line-height: 1.2;
+    padding: 1vh 0;
+  }
+  h1.title {
+    padding: 0 0 1vh;
+    font-size: 30px;
+  }
+  h2 {
+    padding: 1vh 0;
+    font-size: 20px;
+  }
+  h3 {
+    padding: 1vh 0;
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 1600px) {
+  .container {
+    padding-right: calc(18vw - (100vw - 100%));
+    padding-left: 18vw;
+  }
+  a, p, td, th, tr, code, pre, ol, ul, li, div {
+    font-size: 20px;
+  }
+  h1 {
+    font-size: 30px;
+    line-height: 1.2;
+    padding: 1.75vh 0;
+  }
+  h1.title {
+    padding: 0 0 1vh;
+    font-size: 36px;
+  }
+  h2 {
+    padding: 1.5vh 0;
+    font-size: 22px;
+  }
+  h3 {
+    padding: 1.5vh 0;
+    font-size: 20px;
+  }
+}
+@media screen and (min-width: 2000px) {
+  .container {
+    padding-right: calc(22vw - (100vw - 100%));
+    padding-left: 22vw;
+  }
+  a, p, td, th, tr, code, pre, ol, ul, li, div {
+    font-size: 20px;
+  }
+  h1 {
+    font-size: 30px;
+    line-height: 1.2;
+    padding: 1.75vh 0;
+  }
+  h1.title {
+    padding: 0 0 1vh;
+    font-size: 36px;
+  }
+  h2 {
+    padding: 1.5vh 0;
+    font-size: 24px;
+  }
+  h3 {
+    padding: 1.5vh 0;
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 2400px) {
+  .container {
+    padding-right: calc(24vw - (100vw - 100%));
+    padding-left: 24vw;
+  }
+  a, p, td, th, tr, code, pre, ol, ul, li, div {
+    font-size: 22px;
+  }
+  h1 {
+    font-size: 30px;
+    line-height: 1.2;
+    padding: 1.75vh 0;
+  }
+  h1.title {
+    padding: 0 0 1vh;
+    font-size: 36px;
+  }
+  h2 {
+    padding: 1.5vh 0;
+    font-size: 24px;
+  }
+  h3 {
+    padding: 1.5vh 0;
+    font-size: 20px;
+  }
+}
+@media screen and (min-width: 3200px) {
+  .container {
+    padding-right: calc(32vw - (100vw - 100%));
+    padding-left: 28vw;
+  }
+}
+footer p {
+  font-family: "Charter";
+}
+
+/* ======================== Blog ===================== */
+div.container.blog#first-content div.blog-title .blog-intro p.author {
+  padding: 4px 0 10px;
+  font-family: "Charter";
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+  font-size: 85%;
+}
+div.container.blog#first-content div.blog-title .blog-intro p.abstract {
+  font-family: "Charter";
+  font-weight: 400;
+  padding: 1vh 0;
+  font-size: 85%;
+  line-height: 1.6;
+}
+div.container.blog#first-content div.blog-title .blog-intro .info p {
+  text-transform: uppercase;
+  color: #353535;
+  font-weight: 500;
+  font-size: 85%;
+}
+
+div.container.blog p.text {
+  padding: 1.5vh 0;
+  font-family: "Charter", sans-serif;
+}
+div.container.blog p.text:last-child {
+  padding-bottom: 0;
+}
+div.container.blog ul li p.text, div.container.blog ol li p.text {
+  padding: 0vh 0 1vh 0 !important;
+}
+div.container.blog p.caption {
+  padding: 1vh 0;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0px;
+  font-size: 70%;
+}
+div.container.blog p.caption b {
+  font-weight: 600 !important;
+}
+
+/* ======================== Button ===================== */
+input[type=submit], input[type=reset], input[type=button],
+button, .button {
+  font-size: 0.65em;
+  font-weight: 500;
+}
+
+/* ======================== Table ===================== */
+table th b, table td b {
+  font-weight: 700;
+}
+table thead {
+  font-weight: 500;
+}
+
+/* ======================== Selection ===================== */
+select {
+  padding: 2px 2px;
+}
+
+/* ======================== Slider Display ===================== */
+.before figcaption,
+.after figcaption {
+  font-size: 70%;
+}
+
+/* ======================== Key Insights Box ===================== */
 .insights-box {
   border: 2px solid #c6c6c6;
   border-radius: 8px;
@@ -1017,6 +1594,34 @@ pre code {
   font-family: "Charter", serif;
 }
 
-h1, h2, h3, h4, h5, h6, p, a, code, pre, ol, ul, li {
-  line-height: 1.5;
+/* ======================== Hover Image Effect ===================== */
+.hover-image-container {
+  position: relative;
+  cursor: pointer;
+  display: block;
 }
+.hover-image-container .hover-image-default {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 1;
+}
+.hover-image-container .hover-image-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+}
+.hover-image-container:hover .hover-image-default {
+  opacity: 0;
+}
+.hover-image-container:hover .hover-image-hover {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=main_free.css.map */
